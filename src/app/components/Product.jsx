@@ -26,13 +26,13 @@ const bgcolor = backgroundColors[props.bgcolor] || "bg-pink-200";
         <div className="py-4">
         <div className="w-64">
           <div className={`${bgcolor} p-4 rounded-xl`}>
-            <img className='' src={props.picture} alt="iphone" />
+            <img className='h-48' src={props.picture} alt="iphone" />
           </div>
         
         <div className="mt-2">
-        <h3 className="font-bold text-xl">{props.name}</h3>
+        <h3 className="font-bold text-xl whitespace-nowrap overflow-scroll scrollbar-hide">{props.name}</h3>
         </div>
-        <p className="text-sm mt-1 leading-4 text-gray-700">{props.description}</p>
+        <p className="text-sm mt-1 leading-4 text-gray-700 h-24 overflow-scroll scrollbar-hide">{props.description}</p>
         <div className=" flex justify-between mt-2">
           <div className="text-2xl font-bold">${props.price}</div>
           <button onClick={() => {addProducts(props.id)}} className="bg-purple-300 py-1 px-3 rounded-xl">+</button>
