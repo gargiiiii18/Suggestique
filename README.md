@@ -14,7 +14,7 @@ If you'd like to contribute to my project, add additional features, etc, please 
 ## App Screenshots
 
 ### Homepage
-![Home Page](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/homepage1.png)
+![Home Page](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/homepage1.png?raw=true)
 
 ## Cart
 ![Cart](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/cart1.png)
