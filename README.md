@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# E-Commerce Shopping Website
 
-## Getting Started
+An intuitive and functional E-Commerce shopping platform where users can search for products, add them to their cart, view billing details, and checkout seamlessly.
 
-First, run the development server:
+If you'd like to contribute to my project, add additional features, etc, please fork the repository and use a feature branch. Pull requests are warmly welcome.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Product Search**: Effortlessly filter items based on search.
+- **Cart Management**: Add, remove, or update items in the cart.
+- **Secure Checkout**: Stripe-powered payment integration for a safe transaction experience.
+- **Dynamic Billing**: Automatic calculation of totals and taxes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## App Screenshots
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Homepage
+![Home Page](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/homepage1.png)
 
-## Learn More
+## Cart
+![Cart](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/cart1.png)
 
-To learn more about Next.js, take a look at the following resources:
+## Checkout
+![Checkout](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/summary.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Payment
+![Payment](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/payment.png)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Confirmation
+![Confirmation](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/confirmation.png)
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Frontend**: [Next.js](https://nextjs.org/) for a fast and interactive user interface.
+- **Backend**: [Node.js](https://nodejs.org/) for efficient server-side logic.
+- **Database**: [MongoDB](https://www.mongodb.com/) for scalable and flexible data storage.
+- **Payment Integration**: [Stripe](https://stripe.com/) for secure payments.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/gargiiiii18/ecommerce-shopping-website
+   cd ecommerce-shopping-website
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables in a `.env` file:
+   ```plaintext
+   MONGO_URL=<your-mongodb-uri>
+   STRIPE_PUBLIC_KEY=<your-stripe-public-key>
+   STRIPE_SECRET_KEY=<your-stripe-secret-key>
+   SIGNING_SECRET=<your-signing-secret>
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Deployment
+
+This project can be deployed to any modern cloud platform supporting Node.js, such as Vercel, Netlify, or AWS. Ensure to add the environment variables during deployment.
+
+## Contributions
+
+Pull requests are most welcome! 🎉  
+If you have ideas, suggestions, or bug fixes, feel free to fork the repository, make your changes, and submit a pull request. Let’s make this project even better together!
+
+---
+
+Let me know if you'd like further customization! 😊
