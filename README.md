@@ -47,6 +47,13 @@ If you'd like to contribute to my project, add additional features, etc, please 
    ```bash
    npm install
    ```
+3. Set up MongoDB
+   - Create a MongoDB cluster on MongoDB Atlas or set up a local MongoDB instance.
+   - Create a database for the project (e.g., ecommerce).
+   - Get your MongoDB connection string, which should look like this:
+   ```plaintext
+   mongodb+srv://<username>:<password>@cluster0.mongodb.net/<database-name>?retryWrites=true&w=majority
+   ```
 
 3. Set up environment variables in a `.env` file:
    ```plaintext
@@ -64,12 +71,3 @@ If you'd like to contribute to my project, add additional features, etc, please 
 ## Deployment
 
 This project can be deployed to any modern cloud platform supporting Node.js, such as Vercel, Netlify, or AWS. Ensure to add the environment variables during deployment.
-
-## Contributions
-
-Pull requests are most welcome! 🎉  
-If you have ideas, suggestions, or bug fixes, feel free to fork the repository, make your changes, and submit a pull request. Let’s make this project even better together!
-
----
-
-Let me know if you'd like further customization! 😊
