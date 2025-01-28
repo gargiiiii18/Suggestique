@@ -1,6 +1,6 @@
 # E-Commerce Shopping Website
 
-An intuitive and functional E-Commerce shopping platform where users can search for products, add them to their cart, view billing details, and checkout seamlessly.
+An intuitive and functional E-Commerce shopping platform using Next.js where users can search for products, add them to their cart, view billing details, and checkout seamlessly.
 
 If you'd like to contribute to my project, add additional features, etc, please fork the repository and use a feature branch. Pull requests are warmly welcome.
 
