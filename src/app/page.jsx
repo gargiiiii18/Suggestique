@@ -1,6 +1,4 @@
 "use client";
-
-import Image from "next/image";
 import { useState, useEffect, useContext } from "react";
 import Product from "./components/Product";
 import Footer from "./components/Footer";
@@ -52,7 +50,7 @@ export default function Home() {
   
   return (
     <div>
-  <div className="p-5 pb-10">
+  <div className="bg-purple-50 p-5 pb-10">
     {success && 
       <div className="bg-purple-300 p-4 mb-5 text-gray-700 text-lg rounded-xl">Thanks for shopping with us!</div>
     }
@@ -73,7 +71,7 @@ export default function Home() {
         <div>
             <h2 className="text-2xl capitalize px-7 py-3">{name}</h2>
 
-            <div className="flex overflow-x-scroll snap-x scrollbar-hide">
+            <div className="flex overflow-x-scroll snap-x">
             {productsSearched.filter(product => product.category === name).map(product => (
             <div key={product._id} className="px-7 snap-start">
             <Product id={product._id} bgcolor={product.category} name={product.name} description={product.description} price={product.price} picture={product.picture}/>
