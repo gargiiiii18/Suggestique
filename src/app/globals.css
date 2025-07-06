@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root{
+     --bg-gradient: linear-gradient(95.17deg, #DBAEF5 0%, #E1CCED 50%, #EFDAF7 89%);
 
+     .bg-gradient {
+        background: var(--bg-gradient);
+}
+
+}
 
 
