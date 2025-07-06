@@ -13,15 +13,6 @@ const page = () => {
     context: ''
   });
 
-  const handleTextChange = (e) => {
-    const {name, value} = e.target;
-    setFormData((prev) => ({
-      prev,
-      [name]: value,
-    })
-  )
-  }
-
   // const handleSubmit = () => {
   //   setFormData(() => {
   //     const {name, value} = event.target;
@@ -40,12 +31,12 @@ const page = () => {
 
         <div className='flex w-100 items-center gap-4'>
         <label className='text-left'>Occasion:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="text" name="occasion" value={formData.occasion} required onChange={handleTextChange} />
+        <input className='outline-none py-1 px-2 rounded-xl' type="text" name="occasion" value={formData.occasion} required onChange={(e) => {setFormData({...formData, occasion: e.target.value})}} />
         </div>
 
         <div className='flex w-100 items-center gap-6'>   
         <label className='text-left'>Country:</label>
-        <input className='outline-none py-1 px-2 rounded-xl'  type="text" name="country" value={formData.country}  required onChange={handleTextChange}/>
+        <input className='outline-none py-1 px-2 rounded-xl'  type="text" name="country" value={formData.country}  required onChange={(e) => {setFormData({...formData, country: e.target.value})}}/>
         </div>
 
         <div className='flex w-fit justify-center gap-3'>
@@ -53,15 +44,15 @@ const page = () => {
         <div className='flex flex-col justify-evenly'>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Male:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="gender" value={formData.gender} onChange={handleTextChange}/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="gender" checked={formData.gender === 'male'} value='male' onChange={(e) => {setFormData({...formData, gender: e.target.value})}}/>
         </div>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Female:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="gender" value={formData.gender} onChange={handleTextChange}/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="gender" value='female' onChange={(e) => {setFormData({...formData, gender: e.target.value})}}/>
         </div>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Unisex:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="gender" value={formData.gender} onChange={handleTextChange}/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="gender" value='unisex' onChange={(e) => {setFormData({...formData, gender: e.target.value})}}/>
         </div>
         </div>
         </div>
@@ -71,15 +62,15 @@ const page = () => {
         <div className='flex flex-col justify-evenly'>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Formal:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="formality" value="formal"/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="formality" value="formal" onChange={(e) => {setFormData({...formData, formality: e.target.value})}}/>
         </div>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Semi Formal:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="formality" value="semi_formal"/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="formality" value="semi_formal" onChange={(e) => {setFormData({...formData, formality: e.target.value})}}/>
         </div>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Casual:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="formality" value="casual"/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="formality" value="casual" onChange={(e) => {setFormData({...formData, formality: e.target.value})}}/>
         </div>
         </div>
         </div>
@@ -89,15 +80,15 @@ const page = () => {
         <div className='flex flex-col justify-evenly'>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Relaxed:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="context" value="relaxed"/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="context" value="relaxed" onChange={(e) => {setFormData({...formData, context: e.target.value})}}/>
         </div>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Moderate:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="context" value="moderate"/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="context" value="moderate" onChange={(e) => {setFormData({...formData, context: e.target.value})}}/>
         </div>
         <div className='flex justify-between items-center gap-3'>
         <label className='text-left'>Conservative:</label>
-        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="context" value="conservative"/>
+        <input className='outline-none py-1 px-2 rounded-xl' type="radio" name="context" value="conservative" onChange={(e) => {setFormData({...formData, context: e.target.value})}}/>
         </div>
         </div>
         </div>
