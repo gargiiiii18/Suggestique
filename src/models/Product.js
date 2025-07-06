@@ -1,4 +1,4 @@
-const { model, models, Schema } = require("mongoose");
+import { model, models, Schema } from 'mongoose';
 
 const ProductSchema = new Schema({
     name: String,
@@ -6,7 +6,7 @@ const ProductSchema = new Schema({
     price: Number,
     category: String,
     picture: String,
-});
+}, {collection: "products"});
 
 const Product = models.Product || model('Product', ProductSchema);
 
