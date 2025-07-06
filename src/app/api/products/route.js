@@ -23,8 +23,10 @@ import Product from "../../../models/Product";
           headers: { "Content-Type": "application/json" },
           // status: 404,
         });
-      } else{
+      } else{  
       const products = await Product.find().exec();
+      // console.log(products);
+      
       return new Response(JSON.stringify(products), {
         headers: { "Content-Type": "application/json" },
       });

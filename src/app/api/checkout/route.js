@@ -8,8 +8,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export async function POST(req, res) {
     await initMongoose();
     try {
-    //    const info = req.body;
-    //    console.log(req.body.products);
        
         const {address, email, products} = await req.json();
         const productIds = products.split(',');
