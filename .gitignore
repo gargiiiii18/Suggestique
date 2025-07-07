@@ -10,6 +10,10 @@
 !.yarn/releases
 !.yarn/versions
 
+#virtual environment
+/recommendation-system-api/venv
+/recommendation-system-api/__pycache__
+
 # testing
 /coverage
 
