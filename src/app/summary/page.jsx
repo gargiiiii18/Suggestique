@@ -138,7 +138,7 @@ const Checkout = () => {
 
 
   return (
-    <div className="m-8 h-screen'">
+    <div className="m-8">
       {message &&
         <div className="m-5">
           <h3 className="font-semibold text-lg text-center">{message}</h3>

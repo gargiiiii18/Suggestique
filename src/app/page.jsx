@@ -50,7 +50,7 @@ export default function Home() {
   
   return (
     <div>
-  <div className="bg-purple-50 p-5 pb-10">
+  <div className="p-5 pb-10">
     {success && 
       <div className="bg-purple-300 p-4 mb-5 text-gray-700 text-lg rounded-xl">Thanks for shopping with us!</div>
     }
