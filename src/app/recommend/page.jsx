@@ -108,14 +108,14 @@ const page = () => {
       <h1 className='text-2xl mb-2 font-semibold text-purple-700'>Recommendations</h1>
       <div className='flex gap-8 m-3 justify-between'>
       <h1 className='text-xl'>Top Recommendation : <span className='font-bold text-purple-700'>{result.top_recommendation}</span></h1>
-      <h2 className='text-xl'>Confidence Level: <span>{result.confidence}</span></h2>
+      <h2 className='text-xl'>Confidence Level: <span className='text-lg'>{result.confidence}</span></h2>
         </div>
         <div>
       <h2 className='text-left my-2 ml-3 text-xl'>Top 3 Recommendations</h2>
       <div className='flex flex-col'>
       {
         (result.top_3).map((reco, index) => (
-          <h3 className='ml-3 text-lg text-left'>{index+1}. {reco[0]}, Confidence level: {reco[1]}</h3>
+          <h3 className='ml-3 text-xl text-left'>{index+1}. {reco[0]}, Confidence level: {reco[1]}</h3>
         ))
       }
       </div>
