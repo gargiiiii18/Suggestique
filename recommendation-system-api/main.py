@@ -2,16 +2,75 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+# from sentence_transformers import SentenceTransformer
+import chromadb
+import uuid
 import numpy as np
 import tensorflow as tf
 import joblib
 import os
+import hashlib
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+# templates = Jinja2Templates(directory="templates")
+
+# embedding_model = sentenceTransformer("all-MiniLM-L6-v2")
+
+# def generate_id(text):
+#     return hashlib.md5(text.encode()).hexdigest()
 
 # Load model and encoders
 class DressAPIModel:
+
+    #chroma db setup
+#     def init_chroma():
+#         client = chromadb.Client()
+#         collection_occasion = client.get_or_create_collection(
+#             name= 'occasion',
+#             metadata = {"hnsw:space" : "cosine"}
+#         )
+#         collection_country = client.get_or_create_collection(
+#             name= 'country',
+#             metadata = {"hnsw:space" : "cosine"}
+#         )
+#         return collection_occasion, collection_country
+
+#     def add_document(collection_occasion, collection_country):
+#         doc_occasion = ['casual_outing', 'picnic', 'graduation', 'beach_party', 'wedding', 'formal_dinner', 'business_meeting', 'religious_event', 'job_interview', 'nightclub', 'cultural_festival']
+#         doc_country = ['nigeria', 'france', 'uk', 'uae', 'usa', 'brazil', 'japan', 'germany', 'saudi_arabia', 'canada', 'australia', 'india', 'south_africa', 'china', 'mexico']
+
+#         embeddings_occasion = embedding_model.encode(doc_occasion).tolist()
+# # 
+#         ids_occasion = [generate_id(doc) for doc in doc_occasion]
+
+#         collection_occasion.add(
+#             ids = ids_occasion,
+#             documents = doc_occasion,
+#             embeddings = embeddings_occasion,
+#             metadatas = None
+#         )
+#         embeddings_country = embedding_model.encode(doc_country).tolist()
+
+#         ids_country = [generate_id(doc) for doc in doc_country]
+
+#         collection_country.add(
+#             ids = ids_country,
+#             documents = doc_country,
+#             embeddings = embeddings_country,
+#             metadatas = None
+#         )
+#         return ids_occasion, ids_country
+
+#     def search_similar(collection, query, n_results=1):
+#         query_embeddings = embedding_model.encode([query]).tolist()
+#         result = collection.query(
+#             query_embeddings = query_embeddings,
+#             n_results = n_results
+#         )
+#         return result
+    
+
+    #Recommender Model
     def __init__(self, model_path="model/"):
         self.model = tf.keras.models.load_model(os.path.join(model_path, "dress_model.keras"))
         self.encoders = {
@@ -22,7 +81,6 @@ class DressAPIModel:
         self.vocab_sizes = {k: len(enc.classes_) for k, enc in self.encoders.items()}
 
     def predict(self, occasion, country, gender, formality=None, context=None):
-
         try:
             # Inference defaults
             formality = formality or {
@@ -42,6 +100,9 @@ class DressAPIModel:
             male_dresses = ['blazer_and_jeans', 'formal_suit', 'tuxedo', 'ethnic_kurta_pajama', 'african_dashiki']
             female_dresses = ['summer_dress', 'midi_dress', 'cocktail_dress', 'evening_gown', 'kimono', 'middle_eastern_kaftan', 'saree', 'lehenga', 'abaya']
 
+            #get the most similar value from chroma db if user enters smthg not alreday present
+            
+
             # Encode
             encoded_input = {
                 'occasion': np.array([self.encoders['occasion'].transform([occasion])[0]]),
@@ -52,7 +113,6 @@ class DressAPIModel:
             }
 
             dress_labels = self.encoders['dress_recommendation'].classes_  # decoded dress names
-
 
             probs = self.model.predict(encoded_input)
            
@@ -75,8 +135,13 @@ class DressAPIModel:
 
         except Exception as e:
             return {"error": str(e)}
+        
 # Instantiate model
 dress_model = DressAPIModel()
+
+#init chromadb
+# collection_occasion, collection_country = dress_model.init_chroma()
+# ids_occasion, ids_country = dress_model.add_document(collection_occasion, collection_country)
 
 # API Input model
 class PredictRequest(BaseModel):
