@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 # from sentence_transformers import SentenceTransformer
+import requests
 import chromadb
 import uuid
 import numpy as np
@@ -68,6 +69,20 @@ class DressAPIModel:
 #             n_results = n_results
 #         )
 #         return result
+
+    #communicating with similar search microservice
+    def get_similar(self, occasion, country):
+        url = 'http://127.0.0.1:8001/similar'
+        payload = {
+            "occasion": occasion,
+            "country": country
+        }
+        response = requests.post(url, json=payload, timeout=5)
+        if response.status_code==200:
+            data = response.json()
+            return data['occasion_similar']['documents'][0][0], data['country_similar']['documents'][0][0]
+        else:
+            raise Exception(f"Failed to fetch from similarity service {response.text}")
     
 
     #Recommender Model
@@ -101,7 +116,8 @@ class DressAPIModel:
             female_dresses = ['summer_dress', 'midi_dress', 'cocktail_dress', 'evening_gown', 'kimono', 'middle_eastern_kaftan', 'saree', 'lehenga', 'abaya']
 
             #get the most similar value from chroma db if user enters smthg not alreday present
-            
+            # occasion = dress_model.get_similar(occasion)
+            # country = dress_model.get_similar(country)
 
             # Encode
             encoded_input = {
@@ -155,9 +171,12 @@ class PredictRequest(BaseModel):
 # JSON prediction endpoint
 @app.post("/predict")
 def predict(request: PredictRequest):
+    occasion, country = dress_model.get_similar(request.occasion, request.country)
+    print(occasion)
+    print(country)
     return dress_model.predict(
-        occasion=request.occasion,
-        country=request.country,
+        occasion=occasion,
+        country=country,
         formality=request.formality,
         context=request.context,
         gender=request.gender,
