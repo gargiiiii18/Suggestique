@@ -1,16 +1,11 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-# from sentence_transformers import SentenceTransformer
 import requests
-import chromadb
-import uuid
 import numpy as np
 import tensorflow as tf
 import joblib
 import os
-import hashlib
 
 app = FastAPI()
 # templates = Jinja2Templates(directory="templates")
@@ -182,29 +177,4 @@ def predict(request: PredictRequest):
         gender=request.gender,
     )
 
-# HTML form endpoint
-@app.get("/form", response_class=HTMLResponse)
-def get_form(request: Request):
-    return templates.TemplateResponse("form.html", {"request": request})
-
-@app.post("/form", response_class=HTMLResponse)
-async def submit_form(
-    request: Request,
-    occasion: str = Form(...),
-    country: str = Form(...),
-    gender: str = Form(...),
-    formality: str = Form(None),
-    context: str = Form(None),
-
-):
-    result = dress_model.predict(occasion, country, gender, formality, context)
-    return templates.TemplateResponse("form.html", {
-        "request": request,
-        "result": result,
-        "occasion": occasion,
-        "country": country,
-        "formality": formality,
-        "context": context,
-        "gender": gender,
-    })
 
