@@ -3,7 +3,7 @@
 export async function POST(req) {
     try {
         const {occasion, country, formality, context, gender} = await req.json();
-        console.log({occasion, country, formality, context, gender});
+        // console.log({occasion, country, formality, context, gender});
         const url = 'http://127.0.0.1:8000/predict';
         const res = await fetch(url, {
             method : 'POST',
@@ -20,7 +20,7 @@ export async function POST(req) {
     }
         );
         const result = await res.json();
-        console.log(result);
+        // console.log(result);
         
         if(res.ok){
             return Response.json(result);
