@@ -22,6 +22,12 @@ const page = () => {
     ]
   })
 
+  const refineText = (str) => {
+    return str.replace(/_/g, ' ').split(' ').map((word) =>
+      word.charAt(0).toUpperCase()+word.slice(1)
+    ).join(' ');
+  }
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
@@ -36,6 +42,8 @@ const page = () => {
     });
 
     const data = await response.json();
+    // let topReco = refineText(data.top_recommendation);
+    // console.log(topReco);
 
     setResult({
       top_recommendation : data.top_recommendation,
@@ -43,7 +51,14 @@ const page = () => {
       top_3: data.top_3
     })
     if(response.ok){
-      console.log(result.top_3); 
+      // console.log(result.top_3); 
+        //  setFormData({
+        //     occasion: '',
+        //     country: '',
+        //     gender: '',
+        //     formality: '',
+        //     context: ''
+        // });
       return data;
     } else{
       return "Failed";
@@ -107,7 +122,7 @@ const page = () => {
     <section className='mx-auto w-fit m-8 p-4 bg-white rounded-xl'>
       <h1 className='text-2xl mb-2 font-semibold text-purple-700'>Recommendations</h1>
       <div className='flex gap-8 m-3 justify-between'>
-      <h1 className='text-xl'>Top Recommendation : <span className='font-bold text-purple-700'>{result.top_recommendation}</span></h1>
+      <h1 className='text-xl'>Top Recommendation : <span className='font-bold text-purple-700'>{refineText(result.top_recommendation)}</span></h1>
       <h2 className='text-xl'>Confidence Level: <span className='text-lg'>{result.confidence}</span></h2>
         </div>
         <div>
@@ -115,7 +130,7 @@ const page = () => {
       <div className='flex flex-col'>
       {
         (result.top_3).map((reco, index) => (
-          <h3 className='ml-3 text-xl text-left'>{index+1}. {reco[0]}, Confidence level: {reco[1]}</h3>
+          <h3 className='ml-3 text-xl text-left'>{index+1}. {refineText(reco[0])}, Confidence level: {reco[1]}</h3>
         ))
       }
       </div>
