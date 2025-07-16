@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Footer from "../components/Footer";
 import { set } from 'mongoose';
+import Product from '../components/Product'
 
 const page = () => {
 
@@ -21,6 +22,10 @@ const page = () => {
       ['', null],
     ]
   })
+
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
+  let categories = '';
+  // const btncolor = 'gray-300';
 
   const refineText = (str) => {
     return str.replace(/_/g, ' ').split(' ').map((word) =>
@@ -50,6 +55,7 @@ const page = () => {
       confidence: data.confidence,
       top_3: data.top_3
     })
+    // setCategory(data.)
     if(response.ok){
       // console.log(result.top_3); 
         //  setFormData({
@@ -59,6 +65,12 @@ const page = () => {
         //     formality: '',
         //     context: ''
         // });
+        // (data.top_3).map(cat => {
+        //   categories = categories.join(cat[0], ',');
+        // })
+        // console.log(categories);
+        
+        getRecommendedProducts(data.top_recommendation);
       return data;
     } else{
       return "Failed";
@@ -68,10 +80,37 @@ const page = () => {
     }
   }
 
-  
+  const getRecommendedProducts = async(category) => {
+    try {
+      const url = `/api/products?categories=${category}`;
+      console.log(url);
+      
+      const response = await fetch(url);
+
+      if(response.ok) {
+        const products = await response.json();
+        setRecommendedProducts(products);
+        console.log(products);
+        return products;
+      } else{
+        setRecommendedProducts("There are no products based on the recommendation");
+        return "Failed.";
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // const recommendationSystem = async(e) => {
+  //   await handleSubmit(e);
+  //   getRecommendedProducts();
+  // }
+
+// console.log(recommendedProducts);
 
   return (
-    <main className='mx-auto mb-20 pb-30 h-screen text-center bg-gradient'>
+    <main className='mx-auto mb-20 pb-30  min-h-screen text-center bg-gradient'>
     <h1 className='p-8 text-5xl font-artistic font-semibold text-purple-700'>Dress Recommender</h1>
 
     <form className='mx-auto w-fit flex flex-col justify-around gap-4' onSubmit={handleSubmit} method='POST' action="/api/recommend">
@@ -138,7 +177,16 @@ const page = () => {
     </section>
      )
 } 
-<section>Browse such items on the website</section>
+<section>
+  {/* <h1 className='text-center text-purple-800 font-bold text-2xl'>Shop Now</h1> */}
+
+  <div className='flex m-2 pb-10 gap-12 justify-center items-center h-full'>
+    {recommendedProducts.map(product => (
+     <Product id={product._id} btncolor='bg-white' name={product.name} description={product.description} price={product.price} picture={product.picture}/>
+     ))}
+    </div>
+
+</section>
      <Footer/>
     </main>
   )

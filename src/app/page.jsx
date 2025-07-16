@@ -47,6 +47,12 @@ export default function Home() {
   else{
     productsSearched = products;
   }
+
+  const refineText = (str) => {
+    return str.replace(/_/g, ' ').split(' ').map((word) =>
+      word.charAt(0).toUpperCase()+word.slice(1)
+    ).join(' ');
+  }
   
   return (
     <div>
@@ -57,10 +63,10 @@ export default function Home() {
     <div className="border-b-2 border-gray-300">
     <div className="p-2 my-2 mx-7 flex justify-between ">
       <h2 className=" items-center font-artistic text-3xl text-purple-600">G-Shopp</h2>
-      <div>
+      <div className="flex justify-center items-center">
     <input value={input} onChange={event => {setInput(event.target.value)}} type="text" placeholder="search for items..." 
-    className="bg-gray-200 py-2 px-4 rounded-xl shrink-0"/>
-    <button>Search</button>
+    className="bg-gray-200 py-2 px-4 w-full rounded-xl shrink-0"/>
+    <button className="text-sm text-purple-800 font-bold absolute right-16">Search</button>
     </div>
     </div>
     </div>
@@ -69,12 +75,12 @@ export default function Home() {
         <div key={name}>
         {  productsSearched.find(product => product.category === name) && (
         <div>
-            <h2 className="text-2xl capitalize px-7 py-3">{name}</h2>
+            <h2 className="text-2xl capitalize px-7 py-3">{refineText(name)}</h2>
 
-            <div className="flex overflow-x-scroll snap-x">
+            <div className="flex overflow-x-scroll scrollbar-hide snap-x">
             {productsSearched.filter(product => product.category === name).map(product => (
             <div key={product._id} className="px-7 snap-start">
-            <Product id={product._id} bgcolor={product.category} name={product.name} description={product.description} price={product.price} picture={product.picture}/>
+            <Product id={product._id} btncolor='bg-purple-300' bgcolor={product.category} name={product.name} description={product.description} price={product.price} picture={product.picture}/>
             </div>
           ))}
             </div>
