@@ -5,8 +5,18 @@ import Product from "../../../models/Product";
     await initMongoose();
     const { searchParams } = req.nextUrl;
     const ids = searchParams.get('ids');
+    const categories = searchParams.get('categories');
     // console.log(ids);
-    
+
+    if(categories){
+      const categoryArray = categories.split(',');
+      // const count =  Math.random()*5 + 1;
+      const topRecommendedProduct = await Product.find({'category' : {$in: categoryArray}}).limit(3).exec();
+      // console.log(topRecommendedProduct);
+      return new Response(JSON.stringify(topRecommendedProduct), {
+        headers: {"Content-Type":"application/json"},
+      });
+    }
     if(ids){
       const idArray = ids.split(',');
       const productsInCart = await Product.find({'_id' : {$in: idArray}}).exec();
