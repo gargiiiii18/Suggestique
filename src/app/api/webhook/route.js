@@ -1,6 +1,6 @@
 import { initMongoose } from "../../../lib/mongoose";
 import Stripe from "stripe";
-import Order from "../../../models/Orders";
+import Order from "../../../models/Order";
 import { buffer } from "micro";
 import getRawBody from "raw-body";
 
