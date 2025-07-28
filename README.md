@@ -1,73 +1,62 @@
-# E-Commerce Shopping Website
+# 👗 An AI-Powered Boutique
 
-An intuitive and functional E-Commerce shopping platform using Next.js where users can search for products, add them to their cart, view billing details, and checkout seamlessly.
+Welcome to the ultimate eCommerce experience — powered by **Next.js 15+, FastAPI, MongoDB, and ChromaDB**. This isn’t just a website — it’s a modular, AI-driven shopping ecosystem. 💅
 
-If you'd like to contribute to my project, add additional features, etc, please fork the repository and use a feature branch. Pull requests are warmly welcome.
+---
 
-## Features
+## 🚀 Features
 
-- **Product Search**: Effortlessly filter items based on search.
-- **Cart Management**: Add, remove, or update items in the cart.
-- **Secure Checkout**: Stripe-powered payment integration for a safe transaction experience.
-- **Dynamic Billing**: Automatic calculation of totals and taxes.
+### 🛍️ Product & Order Management
+- Browse, search, and filter products
+- Add to cart & checkout with **Stripe** integration
+- Store and manage orders using **MongoDB**
 
-## App Screenshots
+### 🔐 Authentication (Auth.js)
+- Secure user login with email & password (Credentials Provider)
+- JWT-based session management
+- Auth-protected routes using `getServerSession` in App Router
+- MongoDB-powered user storage with bcrypt password hashing
 
-### Homepage
-![Home Page](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/homepage1.png?raw=true)
+### 🤖 AI-Powered Recommendation System
+- Custom-built recommendation engine using **FastAPI**
+- Trained ML model that predicts personalized product recommendations
+- Hosted as a separate microservice
 
-## Cart
-![Cart](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/cart1.png)
+### 🔍 Semantic Similarity Search
+- Implemented with **ChromaDB**
+- Vector search to show visually/textually similar items
+- Integrated as a dedicated microservice communicating with the recommender
 
-## Checkout
-![Checkout](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/summary.png)
+### 🧩 Microservice Architecture
+- Split into 3 independent services:
+  - `main-app` (Next.js frontend)
+  - `recommendation-service` (FastAPI backend for ML inference)
+  - `similarity-service` (ChromaDB for vector search)
+- Services communicate via internal API calls
 
-## Payment
-![Payment](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/payment.png)
+### 💾 Database Stack
+- **MongoDB** for:
+  - Users
+  - Products
+  - Orders
+- **ChromaDB** for:
+  - Vector embeddings of products
+  - Real-time similarity retrieval
 
-## Confirmation
-![Confirmation](https://github.com/gargiiiii18/ecommerce-shopping-website/blob/main/public/webapp%20screenshots/confirmation.png)
+---
 
-## Tech Stack
+## 📦 Tech Stack
 
-- **Frontend**: [Next.js](https://nextjs.org/) for a fast and interactive user interface.
-- **Backend**: [Node.js](https://nodejs.org/) for efficient server-side logic.
-- **Database**: [MongoDB](https://www.mongodb.com/) for scalable and flexible data storage.
-- **Payment Integration**: [Stripe](https://stripe.com/) for secure payments.
+| Layer              | Tech             |
+|-------------------|------------------|
+| Frontend          | Next.js 15+ (App Router) |
+| Auth              | Auth.js (formerly NextAuth) |
+| Backend API       | FastAPI          |
+| Machine Learning  | Custom model (recommendations) |
+| Vector DB         | ChromaDB         |
+| Database          | MongoDB          |
+| Payment Gateway   | Stripe           |
+| Styling           | Tailwind CSS     |
+| State Management  | React Hooks (no Redux mess) |
 
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/gargiiiii18/ecommerce-shopping-website
-   cd ecommerce-shopping-website
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up MongoDB
-   - Create a MongoDB cluster on MongoDB Atlas or set up a local MongoDB instance.
-   - Create a database for the project (e.g., ecommerce).
-   - Get your MongoDB connection string, which should look like this:
-   ```plaintext
-   mongodb+srv://<username>:<password>@cluster0.mongodb.net/<database-name>?retryWrites=true&w=majority
-   ```
-
-3. Set up environment variables in a `.env` file:
-   ```plaintext
-   MONGO_URL=<your-mongodb-uri>
-   STRIPE_PUBLIC_KEY=<your-stripe-public-key>
-   STRIPE_SECRET_KEY=<your-stripe-secret-key>
-   SIGNING_SECRET=<your-signing-secret>
-   ```
-
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-## Deployment
-
-This project can be deployed to any modern cloud platform supporting Node.js, such as Vercel, Netlify, or AWS. Ensure to add the environment variables during deployment.
+---
