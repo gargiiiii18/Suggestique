@@ -66,9 +66,6 @@ const Checkout = () => {
     )
   }
 
-
-
-
   useEffect(() => {
     const getSelectedProducts = async () => {
       // if (!selectedProducts || selectedProducts.length === 0) {
