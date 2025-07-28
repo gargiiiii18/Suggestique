@@ -1,7 +1,7 @@
 import { initMongoose } from "../../../lib/mongoose";
 import Stripe from "stripe";
 import Product from "../../../models/Product";
-import Order from "../../../models/Orders";
+import Order from "../../../models/Order";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
@@ -36,7 +36,7 @@ export async function POST(req, res) {
           line_items.push({
             quantity: quantity,
             price_data: {
-              currency: 'USD',
+              currency: 'INR',
               product_data: {name:product.name},
               unit_amount: (product.price)*100,
             }
@@ -49,7 +49,7 @@ export async function POST(req, res) {
         line_items.push({
           quantity: 1,
           price_data: {
-            currency: 'USD',
+            currency: 'INR',
             product_data: {name: 'Tax: (8%)'},
             unit_amount: Math.round(totalProductAmount*0.08),
           }
@@ -58,8 +58,8 @@ export async function POST(req, res) {
         line_items.push({
           quantity: 1,
           price_data: {
-            currency: 'USD',
-            product_data: {name: 'Delivery Charges: ($5)'},
+            currency: 'INR',
+            product_data: {name: 'Delivery Charges: (₹150)'},
             unit_amount: 500,
           }
         });
