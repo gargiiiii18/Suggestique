@@ -62,7 +62,7 @@ export default function Home() {
     }
     <div className="border-b-2 border-gray-300">
     <div className="p-2 my-2 mx-7 flex justify-between ">
-      <h2 className=" items-center font-artistic text-3xl text-purple-600">G-Shopp</h2>
+      <h2 className=" items-center font-artistic font-semibold text-4xl text-purple-700">Suggestique</h2>
       <div className="flex justify-center items-center">
     <input value={input} onChange={event => {setInput(event.target.value)}} type="text" placeholder="search for items..." 
     className="bg-gray-200 py-2 px-4 w-full rounded-xl shrink-0"/>
