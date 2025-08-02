@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import Link from "next/link";
 
 const page = () => {
 
@@ -93,6 +94,7 @@ const page = () => {
 
         <button type='submit' className='mx-auto w-40 mt-4 rounded-full text-white bg-purple-500 shadow-sm shadow-purple-900 px-6 py-2 w-50'>Sign Up</button>
       </form>
+       <h3 className="text-center text-gray-500 font-semibold p-6">Already have an account? <Link className="text-purple-700" href='/signin'> Signin</Link></h3>
     </section>
   )
 }
