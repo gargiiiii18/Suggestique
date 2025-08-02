@@ -8,6 +8,8 @@ export const ProductsContextProvider = ({children}) => {
 
     const[selectedProducts, setSelectedProducts] = useLocalStorageState('cart', {defaultValue: []});
 
+    
+
     return(
         <ProductsContext.Provider value={{selectedProducts, setSelectedProducts}}>{children}</ProductsContext.Provider>
     )
