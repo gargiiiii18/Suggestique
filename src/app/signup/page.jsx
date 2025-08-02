@@ -33,14 +33,12 @@ const page = () => {
       });
       const data = await response.json();
       console.log(data);
-      toast.success(data.message);
+      toast.success('yay');
       } catch (error) {
         console.log(error);
       }
 
   }
-
-  const notify = () => toast('Here is your toast.');
 
   return (
     <section className='mx-auto mb-20 pb-30 min-h-screen'>
@@ -85,12 +83,12 @@ const page = () => {
 
           <div className='flex w-100 justify-between items-center gap-14'>
             <label className='text-left text-lg text-purple-700 font-semibold'>Password</label>
-            <input className="bg-gray-200 px-2 py-1 rounded-lg" placeholder='password' type="text" name="password" value={userData.password} required onChange={(e) => { setUserData({ ...userData, password: e.target.value }) }} />
+            <input className="bg-gray-200 px-2 py-1 rounded-lg" placeholder='password' type="password" name="password" value={userData.password} required onChange={(e) => { setUserData({ ...userData, password: e.target.value }) }} />
           </div>
 
           <div className='flex w-100 justify-between items-center gap-14'>
             <label className='text-left text-lg text-purple-700 font-semibold'>Confirm Password</label>
-            <input className="bg-gray-200 px-2 py-1 rounded-lg" placeholder='confirm password' type="text" name="confirm password" value={userData.confirmPassword} required onChange={(e) => { setUserData({ ...userData, confirmPassword: e.target.value }) }} />
+            <input className="bg-gray-200 px-2 py-1 rounded-lg" placeholder='confirm password' type="password" name="confirm password" value={userData.confirmPassword} required onChange={(e) => { setUserData({ ...userData, confirmPassword: e.target.value }) }} />
           </div>
 
         <button type='submit' className='mx-auto w-40 mt-4 rounded-full text-white bg-purple-500 shadow-sm shadow-purple-900 px-6 py-2 w-50'>Sign Up</button>
