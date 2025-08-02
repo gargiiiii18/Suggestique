@@ -1,6 +1,7 @@
 "use client"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Component() {
   const { data: session } = useSession();
@@ -50,7 +51,7 @@ export default function Component() {
 
         <button type='submit' className='mx-auto w-40 mt-4 rounded-full text-white bg-purple-500 shadow-sm shadow-purple-900 px-6 py-2 w-50'>Sign In</button>
       </form>
-      
+      <h3 className="text-center text-gray-500 font-semibold p-6">Don't have an account? <Link className="text-purple-700" href='/signup'> Signup</Link></h3>
       </section>
     </>
   )
