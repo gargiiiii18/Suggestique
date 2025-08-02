@@ -1,5 +1,4 @@
 import mongoose, { model, models, Schema } from 'mongoose';
-import { type } from 'os';
 
 const userSchema = new Schema({
     email: {type: String, required: [true, "Please enter your email"], unique: true},
