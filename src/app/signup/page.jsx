@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { signIn } from "next-auth/react"
 import Link from "next/link";
 
 const page = () => {
@@ -33,19 +34,24 @@ const page = () => {
         body: JSON.stringify(userData)
       });
       const data = await response.json();
-      console.log(data);
-      toast.success('yay');
+      // console.log(data);
+      toast.success('Accounted created successfully')
+
       } catch (error) {
         console.log(error);
       }
+      const result = await signIn("credentials", {
+      email: userData.email,
+      password: userData.password,
+      redirect: true,
+      callbackUrl: "/",
+    })
+      
 
   }
 
   return (
     <section className='mx-auto mb-20 pb-30 min-h-screen'>
-
-      
-
       <h1 className='p-8 text-5xl text-purple-600 text-center font-artistic font-semibold'>Signup</h1>
 
       <form className='mx-auto w-fit flex flex-col justify-around gap-4' onSubmit={handleSubmit} method='POST' action="">
