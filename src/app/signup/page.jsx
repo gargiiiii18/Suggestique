@@ -46,8 +46,6 @@ const page = () => {
       redirect: true,
       callbackUrl: "/",
     })
-      
-
   }
 
   return (
