@@ -1,10 +1,14 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import {ProductsContext} from "../contexts/ProductsContext";
 
 const Product = (props) => {
 
-  const {setSelectedProducts} = useContext(ProductsContext);
+  // const {setSelectedProducts} = useContext(ProductsContext);
+  const {cart, setCart} = useContext(ProductsContext);
+  // console.log(props);
+  
+
   const btncolor = 'bg-purple-300';
 
   const backgroundColors = {
@@ -14,13 +18,26 @@ const Product = (props) => {
 }
 
 const addProducts = (id) => {
-  setSelectedProducts(prev => [...prev, id]);
-  console.log(id);
-  
+  // setSelectedProducts(prev => [...prev, id]);
+    setCart(prev => {
+    const existingItem = prev.find(item => item.productId === id);
+    console.log(existingItem);
+    
+    if(existingItem){
+      return prev.map(item => item.productId === id ? {...item, quantity: item.quantity+1 } : item);
+    } else{
+      console.log("adding new item");
+      return [...prev, {productId: id, quantity: 1}];
+    }
+  }
+  );
+  // console.log(cart);
+
 }
 
-const bgcolor = backgroundColors[props.bgcolor] || "bg-whitw";
+const bgcolor = backgroundColors[props.bgcolor] || "bg-white";
 
+//  console.log(props.cart);
  
 
     return(
