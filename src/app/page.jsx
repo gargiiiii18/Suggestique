@@ -10,7 +10,9 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [input, setInput] = useState("");
   const [success, setSuccess] = useState(false);
+  // const [cart, setCart] = useState([]);
   const { setSelectedProducts } = useContext(ProductsContext);
+  const {cart, setCart} = useContext(ProductsContext);
 
   useEffect(() => {
     if (window.location.href.includes('success')) {
@@ -38,6 +40,33 @@ export default function Home() {
     }
     fetchProducts();
   }, [])
+
+//   useEffect(() => {
+//   console.log("cart effect triggered", cart);
+//   const updateDb = async() => {
+// try {
+//     const response = await fetch('/api/cart',{
+//       method: 'POST',
+//       headers: {
+//         'Content-Type':'application/json'
+//       },
+//       body: JSON.stringify(cart),
+//       credentials: "include"
+//     })
+
+//     if(response.ok){
+//       const data = await response.json();
+//       console.log(data);
+//     }
+//   } 
+  
+//   catch (error) {
+//     console.log(error);
+//   }
+//   }
+
+// updateDb();
+// }, [cart]);
 
   const categoryNames = [...new Set(products.map(product => product.category))];
   let productsSearched = [];
@@ -81,7 +110,7 @@ export default function Home() {
                   <div className="flex overflow-x-scroll scrollbar-hide snap-x">
                     {productsSearched.filter(product => product.category === name).map(product => (
                       <div key={product._id} className="px-7 snap-start">
-                        <Product id={product._id} btncolor='bg-purple-300' bgcolor={product.category} name={product.name} description={product.description} price={product.price} picture={product.picture} />
+                        <Product cart={cart} setCart={setCart} id={product._id} btncolor='bg-purple-300' bgcolor={product.category} name={product.name} description={product.description} price={product.price} picture={product.picture} />
                       </div>
                     ))}
                   </div>
@@ -93,7 +122,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <Footer position="sticky" />
+      <Footer cart={cart} position="sticky" />
     </div>
   );
 };
