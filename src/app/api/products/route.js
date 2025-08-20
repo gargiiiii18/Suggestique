@@ -21,6 +21,7 @@ import Product from "../../../models/Product";
       const idArray = ids.split(',');
       const productsInCart = await Product.find({'_id' : {$in: idArray}}).exec();
       // console.log(JSON.stringify(productsInCart));
+      // console.log("hey there");
       
       return new Response(JSON.stringify(productsInCart), {
         headers: {"Content-Type": "application/json"},

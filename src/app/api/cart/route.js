@@ -20,25 +20,32 @@ export async function POST(req){
     }
     const userId = session.user._id;
 
-    for (const item of cartProducts){
-        const result = await User.updateOne(
-            {'_id' : new ObjectId(userId), "cart.productId" : item.productId}, 
-            { $set: {"cart.$.quantity" : item.quantity} }
-        );
-        // console.log(result);
-        if(result.matchedCount === 0){
-            await User.updateOne(
-                {'_id' : new ObjectId(userId)},
-                {$push: {cart: { productId: item.productId, quantity: item.quantity }}}
-            )
-        }
-    }
+    await User.updateOne(
+        {'_id' : new ObjectId(userId)},
+        { $set: {"cart": cartProducts}}
+    )
 
-    //   if(!user){
-    //     throw new Error("No User Found");  
-    // } 
-
-    // console.log(cart);
+//     for (const item of cartProducts){
+//         if(item.quantity>0){
+//         const result = await User.updateOne(
+//             {'_id' : new ObjectId(userId), "cart.productId" : item.productId}, 
+//             { $set: {"cart.$.quantity" : item.quantity} }
+//         );
+//         // console.log(result);
+//         if(result.matchedCount === 0){
+//             await User.updateOne(
+//                 {'_id' : new ObjectId(userId)},
+//                 {$push: {cart: { productId: item.productId, quantity: item.quantity }}}
+//             )
+//         }
+//     } 
+//     else if(item.quantity === 0){
+//        await User.updateOne(
+//             {'_id' : new ObjectId(userId), "cart.productId" : item.productId}, 
+//             { $pull: {cart : {productId: item.productId}} }
+//         ); 
+//     }
+// }
 
     return NextResponse.json({status: 200}, {message: "Items updated"});
     
