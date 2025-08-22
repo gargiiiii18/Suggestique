@@ -9,10 +9,12 @@ await initMongoose();
 
 export async function POST(req){
 
-    const cartProducts = await req.json();
-    console.log(cartProducts);
-    
+    const productId = await req.json();
 
+    // const cartProducts = await req.json();
+    // console.log("Cart products:"); 
+    // console.log(cartProducts);
+    
     const session = await getServerSession(authOptions);
 
     if(!session){
@@ -20,36 +22,45 @@ export async function POST(req){
     }
     const userId = session.user._id;
 
-    await User.updateOne(
-        {'_id' : new ObjectId(userId)},
-        { $set: {"cart": cartProducts}}
-    )
+    // await User.updateOne(
+    //     {'_id' : new ObjectId(userId)},
+    //     { $set: {"cart": cartProducts}}
+    // )
 
-//     for (const item of cartProducts){
-//         if(item.quantity>0){
-//         const result = await User.updateOne(
-//             {'_id' : new ObjectId(userId), "cart.productId" : item.productId}, 
-//             { $set: {"cart.$.quantity" : item.quantity} }
-//         );
-//         // console.log(result);
-//         if(result.matchedCount === 0){
-//             await User.updateOne(
-//                 {'_id' : new ObjectId(userId)},
-//                 {$push: {cart: { productId: item.productId, quantity: item.quantity }}}
-//             )
-//         }
-//     } 
-//     else if(item.quantity === 0){
-//        await User.updateOne(
-//             {'_id' : new ObjectId(userId), "cart.productId" : item.productId}, 
-//             { $pull: {cart : {productId: item.productId}} }
-//         ); 
-//     }
+    // for (const item of cartProducts){
+        // if(item.quantity>0){
+        const result = await User.updateOne(
+            {'_id' : new ObjectId(userId), "cart.productId" : productId}, 
+            { $inc: {"cart.$.quantity" : 1} }
+        );
+        // console.log(result);
+        if(result.matchedCount === 0){
+            await User.updateOne(
+                {'_id' : new ObjectId(userId)},
+                {$push: {cart: { productId: productId, quantity: 1 }}}
+            )
+        }
+    // } 
+    // else if(item.quantity === 0){
+
+    // }
 // }
 
     return NextResponse.json({status: 200}, {message: "Items updated"});
+    // return NextResponse.json(cartProducts);
     
 }
+
+// export async function PATCH(req) {
+
+//     const session = await getServerSession(authOptions);
+
+//     if(!session){
+//         return NextResponse.json({error: "Not Authenticated"}, {status: 400});
+//     }
+
+//     const id = awair req.searchParams();
+// }
 
 export async function GET() {
     // console.log(authOptions);
