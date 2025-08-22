@@ -4,11 +4,13 @@ import Footer from "../components/Footer";
 import { ProductsContext } from "../contexts/ProductsContext";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { SourceTextModule } from "vm";
 
 const Checkout = () => {
   // let uniqueIds = [];
   const path = usePathname();
   const { selectedProducts, setSelectedProducts } = useContext(ProductsContext);
+  const {cart, setCart} = useContext(ProductsContext);
   const [message, setMessage] = useState('');
   const [total, setTotal] = useState(0);
   const [selectedProductsInfo, setSelectedProductsInfo] = useState([]);
@@ -65,6 +67,7 @@ const Checkout = () => {
     })
     )
   }
+  
 
   useEffect(() => {
     const getSelectedProducts = async () => {
@@ -73,7 +76,9 @@ const Checkout = () => {
       // }
       try {
 
-        const uniqueIds = [...new Set([...selectedProducts])];
+        const uniqueIds = [...new Set(cart.map(item => item.productId))];
+        console.log(cart);
+        
         console.log(uniqueIds);
         const url = `/api/products/?ids=${uniqueIds.join(',')}`;
         console.log(url);
@@ -94,8 +99,10 @@ const Checkout = () => {
       }
     }
     getSelectedProducts();
-  }, [selectedProducts]);
+  }, [cart]);
 
+  // console.log(selectedProductsInfo);
+  
 
   useEffect(() => {
     const calculateTotal = async () => {
@@ -113,21 +120,75 @@ const Checkout = () => {
 
 
 
-  const increaseProduct = (id) => {
-    setSelectedProducts((prev) => [...prev, id]);
+  const increaseProduct = async(id) => {
+    // setSelectedProducts((prev) => [...prev, id]);
     // console.log(selectedProducts);
+    setCart((prev) => {
+      const itemToInc = prev.find(item => item.productId === id);
+      if(itemToInc){
+        return prev.map(item => item.productId === id ? {...item, quantity: item.quantity+1 } : item);
+      }
+    });
 
-  }
-
-  const decreaseProduct = (id) => {
-    const pos = selectedProducts.indexOf(id);
-    if (id !== -1) {
-      setSelectedProducts(prev => {
-        return prev.filter((value, index) => index !== pos);
+    try {
+      const response = await fetch(`/api/cart/${id}`, {
+        method: 'PATCH',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({ op : 'inc'}),
       });
+      if(response.ok){
+        const data = await response.json();
+        console.log(data);
+      } else{
+        console.log("some error occured");
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
+  const decreaseProduct = async(id) => {
+     setCart((prev) => {
+      const itemToDec = prev.find(item => item.productId === id);
+      if(itemToDec && itemToDec.quantity>1){
+        return prev.map(item => (item.productId === id) ? {...item, quantity: item.quantity-1 } : item);
+      } else{
+        return prev.filter(item => (item.productId !== id));
+      }
+    })
+        try {
+      const response = await fetch(`/api/cart/${id}`, {
+        method: 'PATCH',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({ op : 'dec'}),
+      });
+      if(response.ok){
+        const data = await response.json();
+        console.log(data);
+      } else{
+        console.log("some error occured");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getQty = (id) => {
+     const product = cart.find(item => item.productId === id);
+     if(product){
+      return product.quantity;
+     }
+     return 0;
+  }
+
+  // console.log(cart);
+
+  // console.log(selectedProductsInfo);
+  
   const deliveryCharges = 5;
 
   const tax = 0.08 * total;
@@ -145,8 +206,8 @@ const Checkout = () => {
       {selectedProductsInfo.length > 0 &&
 
         selectedProductsInfo.map(product =>
-        // {const amount = selectedProducts.filter(id => id === product._id).length;
-        //   if(amount === 0) return;
+ 
+
         (
           <div key={product.id} className="flex w-fit mb-5">
             <div className="bg-gray-200 p-3 rounded-xl shrink-0">
@@ -161,7 +222,7 @@ const Checkout = () => {
                 <div className="grow">₹{product.price}</div>
                 <div className="text-sm">
                   <button onClick={() => decreaseProduct(product._id)} className="border border-purple-600 px-2 rounded-lg">-</button>
-                  <span className="text-gray-700 px-2">Qty: <span>{selectedProducts.filter(id => id === product._id).length}</span></span>
+                  <span className="text-gray-700 px-2">Qty: <span>{getQty(product._id)}</span></span>
                   <button onClick={() => increaseProduct(product._id)} className="bg-purple-400 px-2 rounded-lg">+</button>
                 </div>
               </div>
@@ -172,7 +233,7 @@ const Checkout = () => {
       }
 
 
-      {!message && selectedProducts.length > 0 ? (
+     {!message && selectedProducts.length > 0 ? (
         <form onSubmit={handleSubmit} action="/api/checkout/" method="POST">
           <div>
 
@@ -208,7 +269,7 @@ const Checkout = () => {
 
                 <input name="products" type="hidden" value={selectedProducts.join(',')} />
                 {/* <Link className="flex justify-center items-center" href='/checkout'> */}
-                  <button type="submit" className="bg-purple-400 shadow-md shadow-purple-500 text-white m-8 py-2 px-3 rounded-xl font-medium">Proceed to checkout</button>
+                <button type="submit" className="bg-purple-400 shadow-md shadow-purple-500 text-white m-8 py-2 px-3 rounded-xl font-medium">Proceed to checkout</button>
                 {/* </Link> */}
 
               </div>

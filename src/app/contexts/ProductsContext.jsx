@@ -10,17 +10,6 @@ export const ProductsContextProvider = ({children}) => {
     // const [user, setUser] = useState([]);
     const[cart, setCart] = useState([]);
 
-//     const value = useMemo(
-//     () => ({
-//       selectedProducts,
-//       setSelectedProducts,
-//       cart,
-//       setCart,
-//     }),
-//     [selectedProducts] // only recreate if these change
-//   );
-
-
     useEffect(() => {
         const getUser = async() => {
             
@@ -38,31 +27,31 @@ export const ProductsContextProvider = ({children}) => {
         getUser();
     }, []);
 
-        useEffect(() => {
-        console.log("cart effect triggered", cart);
-        const updateDb = async() => {
-        try {
-            const response = await fetch('/api/cart',{
-            method: 'POST',
-            headers: {
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(cart),
-            credentials: "include"
-            })
+        // useEffect(() => {
+        // console.log("cart effect triggered", cart);
+        // const updateDb = async() => {
+        // try {
+        //     const response = await fetch('/api/cart',{
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type':'application/json'
+        //     },
+        //     body: JSON.stringify(cart),
+        //     credentials: "include"
+        //     })
 
-            if(response.ok){
-            const data = await response.json();
-            // console.log(data);
-            }
-        } 
+        //     if(response.ok){
+        //     const data = await response.json();
+        //     // console.log(data);
+        //     }
+        // } 
         
-        catch (error) {
-            console.log(error);
-        }
-        }
-        updateDb();
-        }, [cart]);
+        // catch (error) {
+        //     console.log(error);
+        // }
+        // }
+        // updateDb();
+        // }, [cart]);
     // console.log(cart);
 
     return(

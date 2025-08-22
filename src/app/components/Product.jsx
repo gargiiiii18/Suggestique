@@ -1,6 +1,7 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import {ProductsContext} from "../contexts/ProductsContext";
+import { uptime } from "node:os";
 
 const Product = (props) => {
 
@@ -17,23 +18,51 @@ const Product = (props) => {
     laptop: "bg-amber-200",
 }
 
-const addProducts = (id) => {
-  // setSelectedProducts(prev => [...prev, id]);
-    setCart(prev => {
+// const addProducts = async(id) => {
+//   // setSelectedProducts(prev => [...prev, id]);
+//     setCart(prev => {
+//     const existingItem = prev.find(item => item.productId === id);
+//     console.log(existingItem);
+//     let updatedCart;
+//     if(existingItem){
+//       updatedCart = prev.map(item => item.productId === id ? {...item, quantity: item.quantity+1 } : item);
+//     } else{
+//       console.log("adding new item");
+//       updatedCart = [...prev, {productId: id, quantity: 1}];
+//     }
+//     syncCart(updatedCart);
+//     return updatedCart
+//   }
+//   );
+// }
+
+const addProducts = async(id) => {
+   setCart(prev => {
     const existingItem = prev.find(item => item.productId === id);
     console.log(existingItem);
-    
     if(existingItem){
       return prev.map(item => item.productId === id ? {...item, quantity: item.quantity+1 } : item);
     } else{
       console.log("adding new item");
       return [...prev, {productId: id, quantity: 1}];
     }
+   })
+  const response = await fetch('/api/cart',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(id),
+  });
+  if(response.ok){
+     const data = await response.json();
+     console.log(data);
+  } else{
+    console.log("some error occured");
   }
-  );
-  // console.log(cart);
-
 }
+
+// console.log(cart);
 
 const bgcolor = backgroundColors[props.bgcolor] || "bg-white";
 
