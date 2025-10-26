@@ -10,6 +10,7 @@ export async function POST(req, res) {
     try {
        
         const {address, email, products} = await req.json();
+
         const productIds = products.split(',');
         const uniqueIds = [...new Set(productIds)];
         // console.log(uniqueIds);
@@ -66,8 +67,6 @@ export async function POST(req, res) {
 
         const order = await Order.create({
           products: line_items,
-          address,
-          email,
           paid: false,
         });
 
