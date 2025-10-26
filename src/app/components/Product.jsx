@@ -39,11 +39,11 @@ const Product = (props) => {
 const addProducts = async(id) => {
    setCart(prev => {
     const existingItem = prev.find(item => item.productId === id);
-    console.log(existingItem);
+    // console.log(existingItem);
     if(existingItem){
       return prev.map(item => item.productId === id ? {...item, quantity: item.quantity+1 } : item);
     } else{
-      console.log("adding new item");
+      // console.log("adding new item");
       return [...prev, {productId: id, quantity: 1}];
     }
    })
@@ -70,18 +70,18 @@ const bgcolor = backgroundColors[props.bgcolor] || "bg-white";
  
 
     return(
-        <div className="py-4">
+        <div className="h-30 md:h-50 py-4">
         <div className="w-64">
           <div className={`${bgcolor} flex justify-center items-center p-4 rounded-xl`}>
-            <img className='h-48' src={props.picture} alt={props.name} />
+            <img className='h-40 md:h-48' src={props.picture} alt={props.name} />
           </div>
         
         <div className="mt-2">
-        <h3 className="font-bold text-xl whitespace-nowrap overflow-scroll scrollbar-hide">{props.name}</h3>
+        <h3 className="font-bold text-lg md:text-xl whitespace-nowrap overflow-scroll scrollbar-hide">{props.name}</h3>
         </div>
-        <p className="text-sm mt-1 leading-4 text-gray-700 h-24 overflow-scroll scrollbar-hide">{props.description}</p>
+        <p className="text-xs md:text-sm mt-1 leading-4 text-gray-700 h-24 overflow-scroll scrollbar-hide">{props.description}</p>
         <div className="flex justify-between mt-2">
-          <div className="text-2xl font-bold">₹{props.price}</div>
+          <div className="text-xl md:text-2xl font-bold">₹{props.price}</div>
           <button onClick={() => {addProducts(props.id)}} className={`${props.btncolor} py-1 px-3 rounded-xl`}>+</button>
         </div>
       </div>
