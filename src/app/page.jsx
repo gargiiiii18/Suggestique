@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     if (window.location.href.includes('success')) {
       setSuccess(true);
-      setSelectedProducts([]);
+      setCart([]);
 
       setTimeout(() => {
         setSuccess(false);
@@ -91,12 +91,14 @@ export default function Home() {
           <div className="bg-purple-300 p-4 mb-5 text-gray-700 text-lg rounded-xl">Thanks for shopping with us!</div>
         }
         <div className="border-b-2 border-gray-300">
-          <div className="p-2 my-2 mx-7 flex justify-between ">
-            <h2 className=" items-center font-artistic font-semibold text-4xl text-purple-700">Suggestique</h2>
-            <div className="flex justify-center items-center">
-              <input value={input} onChange={event => { setInput(event.target.value) }} type="text" placeholder="search for items..."
-                className="bg-gray-200 py-2 px-4 w-full rounded-xl shrink-0" />
-              <button className="text-sm text-purple-800 font-bold absolute right-16">Search</button>
+          <div className="md:w-full p-2 md:my-2 md:mx-7 flex justify-between gap-2 md:gap-0">
+            <h2 className=" items-center font-artistic font-semibold text-2xl md:text-4xl text-purple-700">Suggestique</h2>
+            <div className="md:mr-14 mb-2 flex justify-center items-center">
+              <input className="text-xs md:text-sm" value={input} onChange={event => { setInput(event.target.value) }} placeholder="Search..." type="text"
+                className="bg-gray-200 py-2 px-4 w-40 md:w-full rounded-xl shrink-0" />
+              <button className="text-xs md:text-sm text-purple-800 font-bold absolute right-10 md:right-16">
+             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#7C3AED"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
+              </button>
             </div>
           </div>
         </div>
