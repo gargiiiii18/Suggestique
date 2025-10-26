@@ -1,10 +1,11 @@
 import { initMongoose } from "../../../lib/mongoose";
 import Stripe from "stripe";
 import Order from "../../../models/Order";
-import { buffer } from "micro";
-import getRawBody from "raw-body";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+console.log("hello world");
+
 
 export async function POST(req, res){
     await initMongoose();
@@ -17,6 +18,9 @@ export async function POST(req, res){
         
         const signature = req.headers.get('stripe-signature'); 
         const event = stripe.webhooks.constructEvent(payload, signature, signingSecret);
+
+        // console.log(event.type);
+        
 
         if(event?.type === 'checkout.session.completed'){
             const metadata = event.data?.object?.metadata;
