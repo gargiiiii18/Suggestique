@@ -3,8 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import { ProductsContext } from "../contexts/ProductsContext";
 import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { SourceTextModule } from "vm";
 
 const Checkout = () => {
   // let uniqueIds = [];
@@ -14,6 +12,7 @@ const Checkout = () => {
   const [message, setMessage] = useState('');
   const [total, setTotal] = useState(0);
   const [selectedProductsInfo, setSelectedProductsInfo] = useState([]);
+  const[isClicked, setClicked] = useState(false);
   // const [products, setProducts] = useState('');
   const [address, setAddress] = useState({
     area: '',
@@ -33,7 +32,7 @@ const Checkout = () => {
     const info = {
       address,
       email,
-      products: selectedProducts.join(','),
+      products: selectedProductsInfo.map(item => item._id).join(','),
     };
     console.log(info);
 
@@ -68,6 +67,8 @@ const Checkout = () => {
     )
   }
   
+  // console.log(selectedProductsInfo);
+  
 
   useEffect(() => {
     const getSelectedProducts = async () => {
@@ -77,11 +78,8 @@ const Checkout = () => {
       try {
 
         const uniqueIds = [...new Set(cart.map(item => item.productId))];
-        console.log(cart);
         
-        console.log(uniqueIds);
         const url = `/api/products/?ids=${uniqueIds.join(',')}`;
-        console.log(url);
 
         const response = await fetch(url);
         const data = await response.json();
@@ -89,7 +87,7 @@ const Checkout = () => {
         setSelectedProductsInfo(data);
 
         if (!selectedProductsInfo.length) {
-          console.log(selectedProducts);
+      
           setMessage(data.message);
         }
 
@@ -101,7 +99,7 @@ const Checkout = () => {
     getSelectedProducts();
   }, [cart]);
 
-  // console.log(selectedProductsInfo);
+  console.log(selectedProductsInfo);
   
 
   useEffect(() => {
@@ -118,6 +116,9 @@ const Checkout = () => {
     calculateTotal();
   }, [selectedProducts, selectedProductsInfo])
 
+
+  // console.log(selectedProducts);
+  
 
 
   const increaseProduct = async(id) => {
@@ -194,33 +195,38 @@ const Checkout = () => {
   const tax = 0.08 * total;
   const grandTotal = total + deliveryCharges + tax;
 
+   console.log(selectedProducts.length); 
 
   return (
-    <div className="m-8">
-      {message &&
-        <div className="m-5">
+    <main className="min-h-screen flex flex-col">
+    <main className="flex flex-col md:flex-row mt-8 gap-8 justify-around">
+      {/* {(message || selectedProducts.length==0) && (
+        // <div className="m-5">
           <h3 className="font-semibold text-lg text-center">{message}</h3>
-
-        </div>
-      }
+      )
+      
+      }  */}
+      <section>
       {selectedProductsInfo.length > 0 &&
 
         selectedProductsInfo.map(product =>
  
 
         (
-          <div key={product.id} className="flex w-fit mb-5">
+          <div key={product.id} className="w-961 mx-4 md:mx-6 flex mb-5">
             <div className="bg-gray-200 p-3 rounded-xl shrink-0">
               <img className='w-24' src={product.picture} alt={product.name} />
             </div>
+            {/* msin content */}
             <div className="pl-4">
               <h3 className="font-semibold text-lg">{product.name}</h3>
               <div>
                 <p className="text-sm leading-4 text-gray-700">{product.description}</p>
               </div>
-              <div className="flex grow justify-end mt-2">
-                <div className="grow">₹{product.price}</div>
-                <div className="text-sm">
+
+              <div className="flex gap-10 items-center mt-2">
+                <div className="">₹{product.price}</div>
+                <div className="text-sm flex items-center gap-2">
                   <button onClick={() => decreaseProduct(product._id)} className="border border-purple-600 px-2 rounded-lg">-</button>
                   <span className="text-gray-700 px-2">Qty: <span>{getQty(product._id)}</span></span>
                   <button onClick={() => increaseProduct(product._id)} className="bg-purple-400 px-2 rounded-lg">+</button>
@@ -231,24 +237,14 @@ const Checkout = () => {
         )
         )
       }
-
-
-     {!message && selectedProducts.length > 0 ? (
-        <form onSubmit={handleSubmit} action="/api/checkout/" method="POST">
+</section>
+<section>
+    {cart.length > 0 && (
+      
           <div>
 
-            <div className="flex justify-center items-center pb-20 gap-16">
-              <div className="flex flex-col gap-2 sm:w-96">
+            <div className="flex justify-center items-center mb-4 pb-20 gap-16">
 
-                <h3 className="pb-1 text-left text-gray-700 font-semibold text-lg">Address Details</h3>
-
-                <input className="bg-gray-200 px-2 py-1 rounded-lg" name="area" value={address.area} onChange={handleAddressChange} type="text" placeholder="building name, street, area" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="city" value={address.city} onChange={handleAddressChange} type="text" placeholder="city" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="state" value={address.state} onChange={handleAddressChange} type="text" placeholder="state" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="country" value={address.country} onChange={handleAddressChange} type="text" placeholder="country" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="zipcode" value={address.zipcode} onChange={handleAddressChange} type="number" placeholder="zip code" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="email" value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="email address" />
-              </div>
               <div className="flex flex-col sm:w-96 font-semibold text-lg">
                 <div className="flex justify-evenly">
                   <h3 className="grow text-gray-700">Subtotal: </h3>
@@ -269,8 +265,22 @@ const Checkout = () => {
 
                 <input name="products" type="hidden" value={selectedProducts.join(',')} />
                 {/* <Link className="flex justify-center items-center" href='/checkout'> */}
-                <button type="submit" className="bg-purple-400 shadow-md shadow-purple-500 text-white m-8 py-2 px-3 rounded-xl font-medium">Proceed to checkout</button>
+                <button onClick={() => setClicked(!isClicked)} className="bg-purple-400 shadow-md shadow-purple-500 text-white m-8 py-2 px-3 rounded-xl font-medium">{!isClicked ? "Proceed" : "Back"}</button>
                 {/* </Link> */}
+
+                {(isClicked && cart.length>0) && 
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3" action="/api/checkout/" method="POST">
+                <h3 className="pb-1 text-left text-gray-700 font-semibold text-lg">Address Details</h3>
+
+                <input className="bg-gray-200 px-2 py-1 rounded-lg" name="area" value={address.area} onChange={handleAddressChange} type="text" placeholder="building name, street, area" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="city" value={address.city} onChange={handleAddressChange} type="text" placeholder="city" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="state" value={address.state} onChange={handleAddressChange} type="text" placeholder="state" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="country" value={address.country} onChange={handleAddressChange} type="text" placeholder="country" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="zipcode" value={address.zipcode} onChange={handleAddressChange} type="number" placeholder="zip code" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="email" value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="email address" />
+                <button type="submit" className="bg-blue-400 shadow-md shadow-blue-500 text-white m-8 py-2 px-3 rounded-xl font-medium">Checkout</button>
+                   </form>
+                }
 
               </div>
             </div>
@@ -278,12 +288,16 @@ const Checkout = () => {
             <div>
             </div>
           </div>
-        </form>
-      ) : null
-      }
+     
+     )
+      } 
+</section>
 
-      <Footer position='fixed' />
-    </div>
+   
+</main>
+      <Footer position='' />
+      </main>
+    
   )
 }
 
