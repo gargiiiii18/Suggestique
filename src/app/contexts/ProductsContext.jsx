@@ -17,7 +17,7 @@ export const ProductsContextProvider = ({children}) => {
               const response = await fetch('api/cart', {credentials: "include"}); 
               if(response.ok){
                 const userCart = await response.json();
-                console.log(userCart);
+                // console.log(userCart);
                 setCart(userCart);
               } 
             } catch (error) {
