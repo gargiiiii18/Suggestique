@@ -16,16 +16,33 @@ export default function Home() {
 
   useEffect(() => {
     if (window.location.href.includes('success')) {
-      setSuccess(true);
       setCart([]);
-
-      setTimeout(() => {
-        setSuccess(false);
-      }, 5000);
-
+    
+      // ( async() => {
+      //     await clearCart();
+      //     // setTimeout(() => setSuccess(false), 5000);
+      // })
+        setSuccess(true); 
+        setTimeout(() => setSuccess(false), 5000);
     }
 
   }, [])
+
+  const clearCart = async() => {
+    console.log("clearing cart");
+    
+    try {
+    const res = await fetch("/api/cart", {
+      credentials: "include",
+      method: 'DELETE'
+    });
+    if(res.ok){
+      setCart([]);
+    }      
+    } catch (error) {
+      console.log(error); 
+    }
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
