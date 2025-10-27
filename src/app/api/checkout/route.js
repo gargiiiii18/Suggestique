@@ -2,13 +2,25 @@ import { initMongoose } from "../../../lib/mongoose";
 import Stripe from "stripe";
 import Product from "../../../models/Product";
 import Order from "../../../models/Order";
+import User from "../../../models/User";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options"
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+  await initMongoose();
 
 export async function POST(req, res) {
-    await initMongoose();
     try {
+
+       const userSession = await getServerSession(authOptions);
+        
+
+        if(!userSession) {
+          return NextResponse.json({status: 400}, {message: "Not Authenticated"});
+        }
        
+        const userId = await userSession.user._id;
         const {address, email, products} = await req.json();
 
         const productIds = products.split(',');
@@ -17,17 +29,13 @@ export async function POST(req, res) {
         
         const productsPayable = await Product.find({_id: {$in:uniqueIds}}).exec();
 
-        // console.log(address);
-        // console.log(email);
-        // console.log(productIds);
-        // console.log(productsPayable);
 
         let line_items = [];
         for(let productId of uniqueIds){
           // console.log(productId);
           
           const quantity_array = productIds.filter(id => id == productId);
-           const quantity = quantity_array.length;
+          const quantity = quantity_array.length;
           // console.log(quantity_array);
           
           // console.log(quantity);
@@ -45,6 +53,8 @@ export async function POST(req, res) {
 
         }
 
+        console.log(line_items);
+        
         const totalProductAmount = line_items.reduce((total, item) => total + item.price_data.unit_amount * item.quantity, 0);
         
         line_items.push({
@@ -61,7 +71,7 @@ export async function POST(req, res) {
           price_data: {
             currency: 'INR',
             product_data: {name: 'Delivery Charges: (₹150)'},
-            unit_amount: 500,
+            unit_amount: 15000,
           }
         });
 
@@ -69,6 +79,7 @@ export async function POST(req, res) {
           products: line_items,
           paid: false,
         });
+
 
         const session = await stripe.checkout.sessions.create({
           line_items: line_items,
@@ -78,6 +89,11 @@ export async function POST(req, res) {
           cancel_url: `${req.headers.get('origin')}?canceled=true`,
           metadata: {orderId: order._id.toString()},
         });
+
+
+       if(session.success_url){
+        await User.findByIdAndUpdate(userId, {$set: {cart: []}});
+       }
 
 
         return new Response(JSON.stringify({url: session.url}), {
