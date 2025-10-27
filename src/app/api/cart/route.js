@@ -10,10 +10,6 @@ await initMongoose();
 export async function POST(req){
 
     const productId = await req.json();
-
-    // const cartProducts = await req.json();
-    // console.log("Cart products:"); 
-    // console.log(cartProducts);
     
     const session = await getServerSession(authOptions);
 
