@@ -38,6 +38,7 @@ const Checkout = () => {
 
     try {
       const response = await fetch('/api/checkout', {
+        credentials: "include",
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ const Checkout = () => {
       if (url) {
         window.location.href = url;
       }
-      console.log(result);
+      // console.log(result);
 
 
     } catch (error) {
@@ -103,18 +104,30 @@ const Checkout = () => {
   
 
   useEffect(() => {
+    
     const calculateTotal = async () => {
-      if (selectedProducts.length && selectedProductsInfo.length) {
+          // console.log("hey");
+      if (selectedProductsInfo.length>0) {
         let subtotal = 0;
-        for (let id of selectedProducts) {
-          const productPrice = await selectedProductsInfo.find(p => p._id === id).price || 0;
+        selectedProductsInfo.forEach(item => {
+          console.log("inside foreach");
+          
+          const productPrice = Number(item.price);
           subtotal += productPrice;
-        }
+          console.log(subtotal);
+          
+        })
+        // for (let item of cart) {
+        //   const productPrice = await cart.find(p => p._id === item.id).price || 0;
+        //   console.log(productPrice);
+          
+        //   subtotal += productPrice;
+        // }
         setTotal(subtotal);
       }
     }
     calculateTotal();
-  }, [selectedProducts, selectedProductsInfo])
+  }, [selectedProductsInfo, cart])
 
 
   // console.log(selectedProducts);
@@ -186,16 +199,16 @@ const Checkout = () => {
      return 0;
   }
 
-  // console.log(cart);
+  // console.log(total);
 
   // console.log(selectedProductsInfo);
   
-  const deliveryCharges = 5;
+  const deliveryCharges = 150;
 
   const tax = 0.08 * total;
   const grandTotal = total + deliveryCharges + tax;
 
-   console.log(selectedProducts.length); 
+  //  console.log(selectedProducts.length); 
 
   return (
     <main className="min-h-screen flex flex-col">
@@ -210,8 +223,6 @@ const Checkout = () => {
       {selectedProductsInfo.length > 0 &&
 
         selectedProductsInfo.map(product =>
- 
-
         (
           <div key={product.id} className="w-961 mx-4 md:mx-6 flex mb-5">
             <div className="bg-gray-200 p-3 rounded-xl shrink-0">
@@ -248,19 +259,19 @@ const Checkout = () => {
               <div className="flex flex-col sm:w-96 font-semibold text-lg">
                 <div className="flex justify-evenly">
                   <h3 className="grow text-gray-700">Subtotal: </h3>
-                  <h3>${total}</h3>
+                  <h3>₹{total}</h3>
                 </div>
                 <div className="flex justify-evenly">
                   <h3 className="grow text-gray-700">Tax: </h3>
-                  <h3>${tax}</h3>
+                  <h3>₹{tax}</h3>
                 </div>
                 <div className="flex justify-evenly">
                   <h3 className="grow text-gray-700">Delivery Charges: </h3>
-                  <h3>${deliveryCharges}</h3>
+                  <h3>₹{deliveryCharges}</h3>
                 </div>
                 <div className="flex justify-evenly border-t-2 pt-2 border-dashed border-gray-300">
                   <h3 className="grow text-gray-700">Grand Total: </h3>
-                  <h3>${grandTotal}</h3>
+                  <h3>₹{grandTotal}</h3>
                 </div>
 
                 <input name="products" type="hidden" value={selectedProducts.join(',')} />
