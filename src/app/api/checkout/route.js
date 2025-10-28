@@ -6,6 +6,7 @@ import User from "../../../models/User";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   await initMongoose();
@@ -91,9 +92,9 @@ export async function POST(req, res) {
         });
 
 
-       if(session.success_url){
-        await User.findByIdAndUpdate(userId, {$set: {cart: []}});
-       }
+      //  if(session.success_url.includes("success")){
+      //   await User.findByIdAndUpdate(userId, {$set: {cart: []}});
+      //  }
 
 
         return new Response(JSON.stringify({url: session.url}), {
