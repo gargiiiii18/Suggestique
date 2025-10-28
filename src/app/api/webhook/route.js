@@ -6,13 +6,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 console.log("hello world");
 
-
 export async function POST(req, res){
     await initMongoose();
     try {
         const signingSecret = process.env.SIGNING_SECRET;
 
-        const rawBody = await req.arrayBuffer();
+        const rawBody = await req.text();
+
+        // const rawBody = await req.arrayBuffer();
         const payload =  Buffer.from(rawBody);
         // console.log(payload);
         
@@ -36,8 +37,8 @@ export async function POST(req, res){
     }
 }
 
-export const config = {
-    api: {
-        bodyParser: false,
-    }
-}
+// export const config = {
+//     api: {
+//         bodyParser: false,
+//     }
+// }
