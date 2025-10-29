@@ -4,8 +4,11 @@ import Product from "./components/Product";
 import Footer from "./components/Footer";
 import { ProductsContext } from "./contexts/ProductsContext";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+
+  const router = useRouter();
 
   const [products, setProducts] = useState([]);
   const [input, setInput] = useState("");
@@ -15,13 +18,11 @@ export default function Home() {
   const {cart, setCart} = useContext(ProductsContext);
 
   useEffect(() => {
+    if(!success){
+      router.push('/')
+    }
     if (window.location.href.includes('success')) {
       setCart([]);
-    
-      // ( async() => {
-      //     await clearCart();
-      //     // setTimeout(() => setSuccess(false), 5000);
-      // })
         setSuccess(true); 
         setTimeout(() => setSuccess(false), 5000);
     }
