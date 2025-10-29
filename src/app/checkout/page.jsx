@@ -283,11 +283,11 @@ const Checkout = () => {
             <form onSubmit={handleSubmit} className="flex flex-col gap-3" action="/api/checkout/" method="POST">
                 <h3 className="pb-1 text-left text-gray-700 font-semibold text-lg">Address Details</h3>
 
-                <input className="bg-gray-200 px-2 py-1 rounded-lg" name="area" value={address.area} onChange={handleAddressChange} type="text" placeholder="building name, street, area" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="city" value={address.city} onChange={handleAddressChange} type="text" placeholder="city" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="state" value={address.state} onChange={handleAddressChange} type="text" placeholder="state" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="country" value={address.country} onChange={handleAddressChange} type="text" placeholder="country" />
-                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="zipcode" value={address.zipcode} onChange={handleAddressChange} type="number" placeholder="zip code" />
+                <input className="bg-gray-200 px-2 py-1 rounded-lg" name="area" value={address.area} onChange={handleAddressChange} required="true" type="text" placeholder="building name, street, area" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="city" value={address.city} onChange={handleAddressChange} required="true"  type="text" placeholder="city" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="state" value={address.state} onChange={handleAddressChange} required="true"  type="text" placeholder="state" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="country" value={address.country} onChange={handleAddressChange} required="true"  type="text" placeholder="country" />
+                <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="zipcode" value={address.zipcode} onChange={handleAddressChange} required="true"  type="number" placeholder="zip code" />
                 <input className="bg-gray-200 w-full px-2 py-1 rounded-lg" name="email" value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="email address" />
                 <button type="submit" className="bg-blue-400 shadow-md shadow-blue-500 text-white m-8 py-2 px-3 rounded-xl font-medium">Checkout</button>
                    </form>
