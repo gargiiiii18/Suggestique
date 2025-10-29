@@ -109,10 +109,10 @@ const page = () => {
   // console.log(recommendedProducts);
 
   return (
-    <main className='mx-auto mb-20 pb-30  min-h-screen text-center bg-gradient'>
-      <h1 className='p-8 text-5xl font-artistic font-semibold text-purple-700'>Dress Recommender</h1>
+    <main className='mx-auto mb-20 pb-30 min-h-screen text-center bg-gradient'>
+      <h1 className='p-8 text-4xl md:text-5xl font-artistic font-semibold text-purple-700'>Dress Recommender</h1>
 
-      <form className='mx-auto w-fit flex flex-col justify-around gap-4' onSubmit={handleSubmit} method='POST' action="/api/recommend">
+      <form className='text-sm md:text-md mx-auto w-fit flex flex-col justify-center gap-4' onSubmit={handleSubmit} method='POST' action="/api/recommend">
 
         <div className='flex w-100 justify-between items-center gap-4'>
           <label className='text-left'>Occasion:</label>
@@ -145,7 +145,7 @@ const page = () => {
         </div>
 
         <div className='flex w-100 justify-between gap-8'>
-          <label htmlFor="context dropdpwn">Cultural Context (optional)</label>
+          <label htmlFor="context dropdown">Cultural Context (optional)</label>
           <select onChange={(e) => { setFormData({ ...formData, context: e.target.value }) }} className='outline-none py-1 px-2 rounded-xl' name="context" id="context">
             <option value="">Choose Cultural Context</option>
             <option value="relaxed">Relaxed</option>
