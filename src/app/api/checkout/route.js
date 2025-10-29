@@ -88,7 +88,7 @@ export async function POST(req, res) {
           customer_email: email,
           success_url: `${req.headers.get('origin')}?success=true`,
           cancel_url: `${req.headers.get('origin')}?canceled=true`,
-          metadata: {orderId: order._id.toString()},
+          metadata: {orderId: order._id.toString(), userId: userId.toString()},
         });
 
 
