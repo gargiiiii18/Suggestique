@@ -13,6 +13,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [input, setInput] = useState("");
   const [success, setSuccess] = useState(false);
+  const[productsSearched, setProductsSearched] = useState([]);
   // const [cart, setCart] = useState([]);
   const { setSelectedProducts } = useContext(ProductsContext);
   const {cart, setCart} = useContext(ProductsContext);
@@ -86,15 +87,33 @@ export default function Home() {
 // updateDb();
 // }, [cart]);
 
-  const categoryNames = [...new Set(products.map(product => product.category))];
-  let productsSearched = [];
+ 
 
-  if (input) {
-    productsSearched = products.filter(product => product.name.toLowerCase().includes(input));
+  const categoryNames = [...new Set(products.map(product => product.category))];
+  // let productsSearched = [];
+
+   const findSearchedProducts = async(input) => {
+    try {
+    console.log(input);
+    const url = `/api/products?search=${input}`
+
+    const res = await fetch(url);
+    if(res.ok){
+      const searchedProducts = await res.json();
+      setProducts(searchedProducts);
+    } 
+    } catch (error) {
+      console.log(error);
+    }
+    // productsSearched = products.filter(product => product.name.toLowerCase().includes(input));
   }
-  else {
-    productsSearched = products;
-  }
+
+  // if (input) {
+  //   productsSearched = products.filter(product => product.name.toLowerCase().includes(input));
+  // }
+  // else {
+    // productsSearched = products;
+  // }
 
   const refineText = (str) => {
     return str.replace(/_/g, ' ').split(' ').map((word) =>
@@ -114,7 +133,7 @@ export default function Home() {
             <div className="md:mr-14 mb-2 flex justify-center items-center">
               <input className="text-xs md:text-sm" value={input} onChange={event => { setInput(event.target.value) }} placeholder="Search..." type="text"
                 className="bg-gray-200 py-2 px-4 w-40 md:w-full rounded-xl shrink-0" />
-              <button className="text-xs md:text-sm text-purple-800 font-bold absolute right-10 md:right-16">
+              <button onClick={() => findSearchedProducts(input)} className="text-xs md:text-sm text-purple-800 font-bold absolute right-10 md:right-16">
              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#7C3AED"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
               </button>
             </div>
@@ -123,12 +142,12 @@ export default function Home() {
         <div>
           {categoryNames.map(name => (
             <div key={name}>
-              {productsSearched.find(product => product.category === name) && (
+              {products.find(product => product.category === name) && (
                 <div>
                   <h2 className="text-2xl capitalize px-7 py-3">{refineText(name)}</h2>
 
                   <div className="flex overflow-x-scroll scrollbar-hide snap-x">
-                    {productsSearched.filter(product => product.category === name).map(product => (
+                    {products.filter(product => product.category === name).map(product => (
                       <div key={product._id} className="px-7 snap-start">
                         <Product cart={cart} setCart={setCart} id={product._id} btncolor='bg-purple-300' bgcolor={product.category} name={product.name} description={product.description} price={product.price} picture={product.picture} />
                       </div>
