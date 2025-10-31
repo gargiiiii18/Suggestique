@@ -1,6 +1,5 @@
-import NextAuth, { NextAuthOptions }  from "next-auth";
+import { NextAuthOptions }  from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-// import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs";
 import { initMongoose } from "@/lib/mongoose";
 import User from "@/models/User";
