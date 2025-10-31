@@ -2,11 +2,10 @@
 import { useContext, useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import { ProductsContext } from "../contexts/ProductsContext";
-import { usePathname } from "next/navigation";
 
 const Checkout = () => {
   // let uniqueIds = [];
-  const path = usePathname();
+  // const path = usePathname();
   const { selectedProducts, setSelectedProducts } = useContext(ProductsContext);
   const { cart, setCart } = useContext(ProductsContext);
   const [message, setMessage] = useState('');
@@ -87,9 +86,9 @@ const Checkout = () => {
 
         setSelectedProductsInfo(data);
 
-        if (!selectedProductsInfo.length) {
+        if (!cart.length) {
 
-          setMessage(data.message);
+          setMessage("Your cart is empty");
         }
 
       } catch (error) {
@@ -213,12 +212,13 @@ const Checkout = () => {
   return (
     <main className="min-h-screen flex flex-col">
       <main className="flex w-100 flex-col md:flex-row mt-8 gap-8 justify-around">
-        {/* {(message || selectedProducts.length==0) && (
-        // <div className="m-5">
+        {(message || selectedProducts.length==0) && (
+        <div className={`w-full ${!message && "hidden"}`}>
           <h3 className="font-semibold text-lg text-center">{message}</h3>
+          </div>
       )
       
-      }  */}
+      } 
         <section>
           {selectedProductsInfo.length > 0 &&
 
