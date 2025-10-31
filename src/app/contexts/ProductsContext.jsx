@@ -7,6 +7,7 @@ export const ProductsContext = createContext({});
 export const ProductsContextProvider = ({children}) => {
 
     const[selectedProducts, setSelectedProducts] = useLocalStorageState('cart', {defaultValue: []});
+    // const [message, setMessage] = createContext
     // const [user, setUser] = useState([]);
     const[cart, setCart] = useState([]);
 
