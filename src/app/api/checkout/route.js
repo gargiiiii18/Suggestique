@@ -2,7 +2,6 @@ import { initMongoose } from "../../../lib/mongoose";
 import Stripe from "stripe";
 import Product from "../../../models/Product";
 import Order from "../../../models/Order";
-import User from "../../../models/User";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options"
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
