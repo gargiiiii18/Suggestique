@@ -49,7 +49,7 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const url = 'http://localhost:3000/api/products'
+        const url = '/api/products'
         const response = await fetch(url);
         const data = await response.json();
         setProducts(data);
