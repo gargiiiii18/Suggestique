@@ -13,9 +13,13 @@
 #virtual environment
 /recommendation-system-api/venv
 /recommendation-system-api/__pycache__
-
+/recommendation-system-api/model
+/recommendation-system-api/README.md
 # testing
 /coverage
+
+#pictures
+/public
 
 # next.js
 /.next/
