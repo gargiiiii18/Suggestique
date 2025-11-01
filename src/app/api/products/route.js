@@ -1,6 +1,8 @@
 import {initMongoose} from "../../../lib/mongoose";
 import Product from "../../../models/Product";
 
+await initMongoose();
+
  export async function GET(req) {
     await initMongoose();
     const { searchParams } = req.nextUrl;
