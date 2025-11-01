@@ -7,9 +7,9 @@ export const ProductsContext = createContext({});
 export const ProductsContextProvider = ({children}) => {
 
     const[selectedProducts, setSelectedProducts] = useLocalStorageState('cart', {defaultValue: []});
-    // const [message, setMessage] = createContext
-    // const [user, setUser] = useState([]);
+
     const[cart, setCart] = useState([]);
+    const[cartEmpty, setCartEmpty] = useState(false);
 
     useEffect(() => {
         const getUser = async() => {
@@ -18,8 +18,12 @@ export const ProductsContextProvider = ({children}) => {
               const response = await fetch('api/cart', {credentials: "include"}); 
               if(response.ok){
                 const userCart = await response.json();
-                // console.log(userCart);
                 setCart(userCart);
+                if(userCart.length == 0){
+                    setCartEmpty(true);
+                }
+                // console.log(userCart);
+                // setCartEmpty(false);
               } 
             } catch (error) {
                 console.log(error);
@@ -56,8 +60,11 @@ export const ProductsContextProvider = ({children}) => {
     // console.log(cart);
 
     return(
-        <ProductsContext.Provider value={{selectedProducts, setSelectedProducts, cart, setCart}}>
+        <ProductsContext.Provider value={{selectedProducts, setSelectedProducts, cart, setCart, cartEmpty, setCartEmpty}}>
             {children}
         </ProductsContext.Provider>
     )
 }
+
+export const MessageContext = createContext({});
+

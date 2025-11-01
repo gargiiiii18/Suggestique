@@ -8,6 +8,7 @@ const Checkout = () => {
   // const path = usePathname();
   const { selectedProducts, setSelectedProducts } = useContext(ProductsContext);
   const { cart, setCart } = useContext(ProductsContext);
+  const {cartEmpty, setCartEmpty} = useContext(ProductsContext);
   const [message, setMessage] = useState('');
   const [total, setTotal] = useState(0);
   const [selectedProductsInfo, setSelectedProductsInfo] = useState([]);
@@ -86,7 +87,7 @@ const Checkout = () => {
 
         setSelectedProductsInfo(data);
 
-        if (!cart.length) {
+        if (selectedProductsInfo.length == 0 || cartEmpty) {
 
           setMessage("Your cart is empty");
         }
@@ -99,7 +100,7 @@ const Checkout = () => {
     getSelectedProducts();
   }, [cart]);
 
-  console.log(selectedProductsInfo);
+  console.log(message);
 
 
   useEffect(() => {
@@ -212,13 +213,13 @@ const Checkout = () => {
   return (
     <main className="min-h-screen flex flex-col">
       <main className="flex w-100 flex-col md:flex-row mt-8 gap-8 justify-around">
-        {(message || selectedProducts.length==0) && (
-        <div className={`w-full ${!message && "hidden"}`}>
+        {(cartEmpty || selectedProductsInfo.length==0) && (
+        <div className={`w-full ${(!cartEmpty || selectedProductsInfo.length>0) && "hidden"}`}>
           <h3 className="font-semibold text-lg text-center">{message}</h3>
           </div>
       )
       
-      } 
+      }
         <section>
           {selectedProductsInfo.length > 0 &&
 
