@@ -4,6 +4,11 @@ import bcrypt from "bcryptjs";
 import { initMongoose } from "@/lib/mongoose";
 import User from "@/models/User";
 
+// interface Credentials {
+//   email: string;
+//   password: string;
+// }
+
 export const authOptions: NextAuthOptions = {
 
     providers: [
@@ -15,24 +20,30 @@ export const authOptions: NextAuthOptions = {
       email: { label: "Email", type: "text" },
       password: { label: "Password", type: "password" }
     },
-    async authorize(credentials: any) : Promise<any> {
+    async authorize(credentials) : Promise<{id: string; email: string} | null> {
       // Add logic here to look up the user from the credentials supplied
       await initMongoose();
       try {
-        const user = await User.findOne({email: credentials.email});
+        const user = await User.findOne({email: credentials?.email});
 
         if(!user){
             throw new Error('No user found with the provided email');
         }
-        const isPwdCorrect = await bcrypt.compare(credentials.password, user.password);
+        if(!credentials?.password){
+          throw new Error("MIssing User password");
+        }
+        const isPwdCorrect = await bcrypt.compare(credentials?.password, user.password);
         if(isPwdCorrect){
             return user;
         } else{
             throw new Error("Incorrect Password");
         }
 
-      } catch (error: any) {
-        throw new Error(error);
+      } catch (error) {
+        if(error instanceof Error){
+        throw new Error(error.message);
+        }
+        throw new Error("An unknown error occurred");
       }
     }
     })
