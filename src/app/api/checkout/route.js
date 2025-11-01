@@ -10,7 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
   await initMongoose();
 
-export async function POST(req, res) {
+export async function POST(req) {
     try {
 
        const userSession = await getServerSession(authOptions);
@@ -21,7 +21,7 @@ export async function POST(req, res) {
         }
        
         const userId = await userSession.user._id;
-        const {address, email, products} = await req.json();
+        const {email, products} = await req.json();
 
         const productIds = products.split(',');
         const uniqueIds = [...new Set(productIds)];

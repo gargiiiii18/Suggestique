@@ -2,15 +2,15 @@ import { initMongoose } from "../../../lib/mongoose";
 import Stripe from "stripe";
 import Order from "../../../models/Order";
 import User from "../../../models/User";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/options"
-import { NextResponse } from "next/server";
+// import { getServerSession } from "next-auth";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/options"
+// import { NextResponse } from "next/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 console.log("hello world");
 
-export async function POST(req, res){
+export async function POST(req){
     await initMongoose();
     try {
         

@@ -1,7 +1,7 @@
 import {initMongoose} from "../../../lib/mongoose";
 import Product from "../../../models/Product";
 
- export async function GET(req, res) {
+ export async function GET(req) {
     await initMongoose();
     const { searchParams } = req.nextUrl;
     const ids = searchParams.get('ids');

@@ -1,7 +1,6 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 import {ProductsContext} from "../contexts/ProductsContext";
-import { uptime } from "node:os";
 
 const Product = (props) => {
 

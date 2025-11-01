@@ -74,7 +74,7 @@ export async function GET() {
         throw new Error("No User Found");
         
     } 
-    const {email, address, cart} = await user;
+    const {cart} = await user;
     return NextResponse.json(cart);
     
 }

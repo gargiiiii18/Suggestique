@@ -5,6 +5,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 initMongoose();
 
+// interface Error{
+//     message: string;
+// }
+
 export async function POST(request: NextRequest) {
     try {
        const reqBody = await request.json();
@@ -26,16 +30,20 @@ export async function POST(request: NextRequest) {
         password : hashedPassword,
        });
 
-       const savedUser = await newUser.save();
+        await newUser.save();
         return NextResponse.json({message: "User successfully saved!"}, {status: 201});
         
-    } catch (error: any) {
+    } catch (error : unknown) {
         console.log(error);  
-        return NextResponse.json({error: error.message}, {status: 500}); 
+
+        if(error instanceof Error){
+            return NextResponse.json({error: error?.message}, {status: 500}); 
+        }
+            return NextResponse.json({error: "An unknown error occured"}, {status: 500});
     }
 }
 
-export async function GET(request: NextRequest) {
+// export async function GET(request: NextRequest) {
     
-}
+// }
 
