@@ -16,6 +16,7 @@
     "mongoose": "^8.9.4",
     "next": "^15.1.5",
     "next-auth": "^4.24.11",
+    "next-cloudinary": "^6.17.0",
     "raw-body": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
