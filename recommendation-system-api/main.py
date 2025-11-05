@@ -67,12 +67,12 @@ class DressAPIModel:
 
     #communicating with similar search microservice
     def get_similar(self, occasion, country):
-        url = 'http://127.0.0.1:8001/similar'
+        url = os.getenv("SIMILARITY_SEARCH_URL")
         payload = {
             "occasion": occasion,
             "country": country
         }
-        response = requests.post(url, json=payload, timeout=5)
+        response = requests.post(url, json=payload, timeout=35)
         if response.status_code==200:
             data = response.json()
             return data['occasion_similar']['documents'][0][0], data['country_similar']['documents'][0][0]

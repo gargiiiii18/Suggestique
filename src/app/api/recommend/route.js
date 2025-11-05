@@ -4,7 +4,7 @@ export async function POST(req) {
     try {
         const {occasion, country, formality, context, gender} = await req.json();
         // console.log({occasion, country, formality, context, gender});
-        const url = 'http://127.0.0.1:8000/predict';
+        const url = process.env.RECOMMENDATION_URL;
         const res = await fetch(url, {
             method : 'POST',
             headers : {
