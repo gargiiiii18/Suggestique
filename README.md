@@ -3,11 +3,9 @@
 Welcome to the ultimate eCommerce experience — powered by **Next.js 15+, FastAPI, MongoDB, and ChromaDB**. This isn’t just a website — it’s a modular, AI-driven shopping ecosystem. 💅
 
 ---
-## 📷 Demo
+## 🚀 Demo:  **[View Live Project](https://suggestique.vercel.app/)**
 
-[![Watch the video](https://img.youtube.com/vi/gkfKQrHXMxs/0.jpg)](https://www.youtube.com/watch?v=gkfKQrHXMxs)
-
-## 🚀 Features
+## 🪶 Features
 
 ### 🛍️ Product & Order Management
 - Browse, search, and filter products
