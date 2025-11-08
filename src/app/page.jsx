@@ -94,7 +94,7 @@ export default function Home() {
 
    const findSearchedProducts = async(input) => {
     try {
-    console.log(input);
+    // console.log(input);
     const url = `/api/products?search=${input}`
 
     const res = await fetch(url);
@@ -161,7 +161,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <Footer cart={cart} position="sticky" />
+      <Footer cart={cart} position="fixed" />
     </div>
   );
 };

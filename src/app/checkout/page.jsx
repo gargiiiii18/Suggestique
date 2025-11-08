@@ -87,7 +87,7 @@ const Checkout = () => {
 
         setSelectedProductsInfo(data);
 
-        if (selectedProductsInfo.length == 0 || cartEmpty) {
+        if (cart.length == 0 || selectedProductsInfo.length == 0 || cartEmpty) {
 
           setMessage("Your cart is empty");
         }
