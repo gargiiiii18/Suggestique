@@ -8,6 +8,11 @@ import chromadb
 
 app = FastAPI()
 
+# health check
+@app.get("/health")
+def health():
+    return {"status": "similarity ok"}
+
 embedding_model = SentenceTransformer("paraphrase-albert-small-v2")
 
 def generate_id(text):

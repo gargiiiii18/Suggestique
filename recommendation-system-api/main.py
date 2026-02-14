@@ -6,68 +6,25 @@ import numpy as np
 import tensorflow as tf
 import joblib
 import os
+from dotenv import load_dotenv
 
 app = FastAPI()
-# templates = Jinja2Templates(directory="templates")
 
-# embedding_model = sentenceTransformer("all-MiniLM-L6-v2")
+#loading env in dev mode
+load_dotenv()
 
-# def generate_id(text):
-#     return hashlib.md5(text.encode()).hexdigest()
+# health check
+@app.get("/health")
+def health():
+    return {"status": "recommendation ok"}
 
 # Load model and encoders
 class DressAPIModel:
 
-    #chroma db setup
-#     def init_chroma():
-#         client = chromadb.Client()
-#         collection_occasion = client.get_or_create_collection(
-#             name= 'occasion',
-#             metadata = {"hnsw:space" : "cosine"}
-#         )
-#         collection_country = client.get_or_create_collection(
-#             name= 'country',
-#             metadata = {"hnsw:space" : "cosine"}
-#         )
-#         return collection_occasion, collection_country
-
-#     def add_document(collection_occasion, collection_country):
-#         doc_occasion = ['casual_outing', 'picnic', 'graduation', 'beach_party', 'wedding', 'formal_dinner', 'business_meeting', 'religious_event', 'job_interview', 'nightclub', 'cultural_festival']
-#         doc_country = ['nigeria', 'france', 'uk', 'uae', 'usa', 'brazil', 'japan', 'germany', 'saudi_arabia', 'canada', 'australia', 'india', 'south_africa', 'china', 'mexico']
-
-#         embeddings_occasion = embedding_model.encode(doc_occasion).tolist()
-# # 
-#         ids_occasion = [generate_id(doc) for doc in doc_occasion]
-
-#         collection_occasion.add(
-#             ids = ids_occasion,
-#             documents = doc_occasion,
-#             embeddings = embeddings_occasion,
-#             metadatas = None
-#         )
-#         embeddings_country = embedding_model.encode(doc_country).tolist()
-
-#         ids_country = [generate_id(doc) for doc in doc_country]
-
-#         collection_country.add(
-#             ids = ids_country,
-#             documents = doc_country,
-#             embeddings = embeddings_country,
-#             metadatas = None
-#         )
-#         return ids_occasion, ids_country
-
-#     def search_similar(collection, query, n_results=1):
-#         query_embeddings = embedding_model.encode([query]).tolist()
-#         result = collection.query(
-#             query_embeddings = query_embeddings,
-#             n_results = n_results
-#         )
-#         return result
-
     #communicating with similar search microservice
     def get_similar(self, occasion, country):
         url = os.getenv("SIMILARITY_SEARCH_URL")
+        print(url)
         payload = {
             "occasion": occasion,
             "country": country
@@ -111,8 +68,6 @@ class DressAPIModel:
             female_dresses = ['summer_dress', 'midi_dress', 'cocktail_dress', 'evening_gown', 'kimono', 'middle_eastern_kaftan', 'saree', 'lehenga', 'abaya']
 
             #get the most similar value from chroma db if user enters smthg not alreday present
-            # occasion = dress_model.get_similar(occasion)
-            # country = dress_model.get_similar(country)
 
             # Encode
             encoded_input = {
@@ -149,10 +104,6 @@ class DressAPIModel:
         
 # Instantiate model
 dress_model = DressAPIModel()
-
-#init chromadb
-# collection_occasion, collection_country = dress_model.init_chroma()
-# ids_occasion, ids_country = dress_model.add_document(collection_occasion, collection_country)
 
 # API Input model
 class PredictRequest(BaseModel):
