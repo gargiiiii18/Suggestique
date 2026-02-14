@@ -13,7 +13,7 @@ app = FastAPI()
 def health():
     return {"status": "similarity ok"}
 
-embedding_model = SentenceTransformer("paraphrase-albert-small-v2")
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def generate_id(text):
     return hashlib.md5(text.encode()).hexdigest()
