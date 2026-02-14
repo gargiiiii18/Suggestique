@@ -1,22 +1,8 @@
 fastapi
 uvicorn
-
-# Environment variables
-python-dotenv
-
-# HTTP requests between microservices
-requests
-
-# ML / DL stack
 tensorflow==2.18.0
-numpy
+scikit-learn
 joblib
-
-# NLP embeddings
+jinja2
+python-multipart
 sentence-transformers
-
-# Vector database
-chromadb
-
-# Data validation
-pydantic
