@@ -6,3 +6,8 @@ joblib
 jinja2
 python-multipart
 sentence-transformers
+chromadb
+hashlib
+requests
+pydantic
+numpy
