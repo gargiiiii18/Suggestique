@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+sentence-transformers==5.2.2
+torch==2.1.2+cpu
+chromadb
+pydantic
+requests
+numpy
+python-dotenv
+--extra-index-url https://download.pytorch.org/whl/cpu
