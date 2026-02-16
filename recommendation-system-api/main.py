@@ -1,5 +1,4 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
 import numpy as np
