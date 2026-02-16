@@ -5,8 +5,9 @@ scikit-learn
 joblib
 jinja2
 python-multipart
-sentence-transformers
+# sentence-transformers
 chromadb
 requests
 pydantic
 numpy
+google-genai
