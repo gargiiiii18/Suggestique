@@ -2,7 +2,6 @@
 #virtual environment
 /venv
 /__pycache__
-/model
 /README.md
 
 # production
