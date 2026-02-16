@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
+import time
 import numpy as np
 import tensorflow as tf
 import joblib
@@ -20,10 +21,35 @@ def health():
 # Load model and encoders
 class DressAPIModel:
 
+    # check if similarity_search is up
+    def wait_for_similarity_search_service(self, retries=6, delay=5):
+        url = os.getenv("SIMILARITY_SEARCH_URL")
+        
+        print(url)
+        health_url = f"{url}/health"
+
+        for attempt in range(retries):
+            try:
+                r = requests.get(health_url, timeout=5)
+                if r.status_code == 200:
+                    return True
+            except Exception:
+                pass
+            
+            print(f"Similarity service not ready, retry {attempt+1}/{retries}")
+            time.sleep(delay)
+
+        return False
+
     #communicating with similar search microservice
     def get_similar(self, occasion, country):
-        url = os.getenv("SIMILARITY_SEARCH_URL")
-        print(url)
+        base_url = os.getenv("SIMILARITY_SEARCH_URL")
+        url=f"{base_url}/similar"
+        # proceed only if similarity_searched is awake
+        if not self.wait_for_similarity_search_service():
+            print("⚠ similarity_search unavailable, using raw inputs")
+            return occasion, country
+
         payload = {
             "occasion": occasion,
             "country": country
