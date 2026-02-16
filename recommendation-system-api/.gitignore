@@ -1,0 +1,16 @@
+
+#virtual environment
+/venv
+/__pycache__
+/model
+/README.md
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# env files (can opt-in for committing if needed)
+.env*
