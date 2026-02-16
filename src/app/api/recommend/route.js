@@ -5,6 +5,7 @@ export async function POST(req) {
         const {occasion, country, formality, context, gender} = await req.json();
         // console.log({occasion, country, formality, context, gender});
         const url = process.env.RECOMMENDATION_URL;
+        
         const res = await fetch(url, {
             method : 'POST',
             headers : {
