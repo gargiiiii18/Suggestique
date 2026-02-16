@@ -1,22 +1,48 @@
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse
-from sentence_transformers import SentenceTransformer
+# from fastapi.responses import HTMLResponse
+# from sentence_transformers import SentenceTransformer
 from pydantic import BaseModel
-import requests
 import hashlib
 import chromadb
+from dotenv import load_dotenv
+import os
+from google import genai
 
 app = FastAPI()
+
+# load env
+load_dotenv()
 
 # health check
 @app.get("/health")
 def health():
     return {"status": "similarity ok"}
 
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+# configure api key
+api_key = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=api_key)
+
+# embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+EMBEDDING_MODEL = "gemini-embedding-001"
 
 def generate_id(text):
     return hashlib.md5(text.encode()).hexdigest()
+
+# embed text func
+def embed_texts(texts: list[str]) -> list[list[float]]:
+    response = client.models.embed_content(
+        model = EMBEDDING_MODEL,
+        contents=texts
+    )
+    return [e.values for e in response.embeddings]
+
+# embed query func
+def embed_query(text: str) -> list[float]:
+    response = client.models.embed_content(
+        model = EMBEDDING_MODEL,
+        contents=[text]
+    )
+    return response.embeddings[0].values
 
 #chroma db setup
 def init_chroma():
@@ -35,7 +61,7 @@ def add_document(collection_occasion, collection_country):
     doc_occasion = ['casual_outing', 'picnic', 'graduation', 'beach_party', 'wedding', 'formal_dinner', 'business_meeting', 'religious_event', 'job_interview', 'nightclub', 'cultural_festival']
     doc_country = ['nigeria', 'france', 'uk', 'uae', 'usa', 'brazil', 'japan', 'germany', 'saudi_arabia', 'canada', 'australia', 'india', 'south_africa', 'china', 'mexico']
 
-    embeddings_occasion = embedding_model.encode(doc_occasion).tolist()
+    embeddings_occasion = embed_texts(doc_occasion)
 # 
     ids_occasion = [generate_id(doc) for doc in doc_occasion]
 
@@ -45,7 +71,7 @@ def add_document(collection_occasion, collection_country):
         embeddings = embeddings_occasion,
         metadatas = None
     )
-    embeddings_country = embedding_model.encode(doc_country).tolist()
+    embeddings_country = embed_texts(doc_country)
 
     ids_country = [generate_id(doc) for doc in doc_country]
 
@@ -58,7 +84,7 @@ def add_document(collection_occasion, collection_country):
     return ids_occasion, ids_country
 
 def search_similar(collection, query, n_results=1):
-    query_embeddings = embedding_model.encode([query]).tolist()
+    query_embeddings = embed_query(query)
     result = collection.query(
         query_embeddings = query_embeddings,
         n_results = n_results
