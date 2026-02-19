@@ -15,7 +15,7 @@ client = None
 collection_occasion = None
 collection_country = None
 
-EMBEDDING_MODEL = "models/embedding-001"
+EMBEDDING_MODEL = "gemini-embedding-001"
 
 
 def generate_id(text: str) -> str:
