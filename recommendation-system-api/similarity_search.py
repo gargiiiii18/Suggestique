@@ -1,28 +1,35 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 import hashlib
 import chromadb
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 from google import genai
-from contextlib import asynccontextmanager
 
-# load env
+# --------------------------------------------------
+# ENV
+# --------------------------------------------------
 load_dotenv()
-
-# globals (initialized in lifespan)
-client = None
-collection_occasion = None
-collection_country = None
 
 EMBEDDING_MODEL = "gemini-embedding-001"
 
+# --------------------------------------------------
+# GLOBAL STATE
+# --------------------------------------------------
+client = None
+collection_occasion = None
+collection_country = None
+initialized = False
 
+
+# --------------------------------------------------
+# HELPERS
+# --------------------------------------------------
 def generate_id(text: str) -> str:
     return hashlib.md5(text.encode()).hexdigest()
 
 
-# embed text func
 def embed_texts(texts: list[str]) -> list[list[float]]:
     response = client.models.embed_content(
         model=EMBEDDING_MODEL,
@@ -31,7 +38,6 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
     return [e.values for e in response.embeddings]
 
 
-# embed query func
 def embed_query(text: str) -> list[float]:
     response = client.models.embed_content(
         model=EMBEDDING_MODEL,
@@ -40,24 +46,28 @@ def embed_query(text: str) -> list[float]:
     return response.embeddings[0].values
 
 
-# chroma db setup
 def init_chroma():
     chroma_client = chromadb.Client()
 
-    collection_occasion = chroma_client.get_or_create_collection(
+    occ = chroma_client.get_or_create_collection(
         name="occasion",
         metadata={"hnsw:space": "cosine"}
     )
 
-    collection_country = chroma_client.get_or_create_collection(
+    ctry = chroma_client.get_or_create_collection(
         name="country",
         metadata={"hnsw:space": "cosine"}
     )
 
-    return collection_occasion, collection_country
+    return occ, ctry
 
 
-def add_document(collection_occasion, collection_country):
+def populate_collections():
+    global initialized
+
+    if initialized:
+        return
+
     doc_occasion = [
         "casual_outing", "picnic", "graduation", "beach_party",
         "wedding", "formal_dinner", "business_meeting",
@@ -71,17 +81,22 @@ def add_document(collection_occasion, collection_country):
         "australia", "india", "south_africa", "china", "mexico"
     ]
 
-    collection_occasion.add(
-        ids=[generate_id(d) for d in doc_occasion],
-        documents=doc_occasion,
-        embeddings=embed_texts(doc_occasion)
-    )
+    if collection_occasion.count() == 0:
+        collection_occasion.add(
+            ids=[generate_id(d) for d in doc_occasion],
+            documents=doc_occasion,
+            embeddings=embed_texts(doc_occasion),
+        )
 
-    collection_country.add(
-        ids=[generate_id(d) for d in doc_country],
-        documents=doc_country,
-        embeddings=embed_texts(doc_country)
-    )
+    if collection_country.count() == 0:
+        collection_country.add(
+            ids=[generate_id(d) for d in doc_country],
+            documents=doc_country,
+            embeddings=embed_texts(doc_country),
+        )
+
+    initialized = True
+    print("✅ Chroma populated")
 
 
 def search_similar(collection, query, n_results=1):
@@ -91,34 +106,39 @@ def search_similar(collection, query, n_results=1):
     )
 
 
-# 🔥 lifespan
+# --------------------------------------------------
+# LIFESPAN (FAST ONLY)
+# --------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global client, collection_occasion, collection_country
 
-    print("🔄 Starting similarity service...")
+    print("🚀 similarity_search booting")
 
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY missing")
 
     client = genai.Client(api_key=api_key)
-
     collection_occasion, collection_country = init_chroma()
-    add_document(collection_occasion, collection_country)
 
-    print("✅ Similarity service ready")
+    print("🟢 similarity_search ready (lazy init)")
     yield
-    print("🛑 Similarity service shutdown")
+    print("🛑 similarity_search shutdown")
 
 
 app = FastAPI(lifespan=lifespan)
 
 
-# health check
+# --------------------------------------------------
+# ROUTES
+# --------------------------------------------------
 @app.get("/health")
 def health():
-    return {"status": "similarity ok"}
+    return {
+        "status": "ok",
+        "initialized": initialized
+    }
 
 
 class SimilarityRequest(BaseModel):
@@ -128,8 +148,10 @@ class SimilarityRequest(BaseModel):
 
 @app.post("/similar")
 def get_similar(request: SimilarityRequest):
-    if collection_occasion is None or collection_country is None:
-        return {"error": "Service warming up, try again shortly"}
+    try:
+        populate_collections()
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
 
     return {
         "occasion_similar": search_similar(collection_occasion, request.occasion),
