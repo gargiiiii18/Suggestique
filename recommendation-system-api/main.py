@@ -26,8 +26,6 @@ collection_country = None
 initialized = False
 dress_model = None  # initialized in lifespan
 
-dress_model = None  # initialized in lifespan
-
 
 class DressAPIModel:
 
