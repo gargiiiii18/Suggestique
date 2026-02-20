@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
 import time
+import threading
 import numpy as np
 import tensorflow as tf
 import joblib
@@ -29,7 +30,7 @@ class DressAPIModel:
         }
 
     # check if similarity_search is up
-    def wait_for_similarity_search_service(self, retries=6, delay=5):
+    def wait_for_similarity_search_service(self, retries=12, delay=5):
         base_url = os.getenv("SIMILARITY_SEARCH_URL")
         health_url = f"{base_url}/health"
 
@@ -142,6 +143,25 @@ class DressAPIModel:
         }
 
 
+# 🔥 Keep Alive Background Process
+def keep_alive():
+    """Pings itself and similarity_search periodically to prevent Render from sleeping."""
+    # Render automatically sets RENDER_EXTERNAL_URL for each web service individually
+    port = os.getenv("PORT", 8000)
+    my_url = os.getenv("RENDER_EXTERNAL_URL", f"http://127.0.0.1:{port}")
+    sim_url = os.getenv("SIMILARITY_SEARCH_URL", "http://127.0.0.1:8001")
+    
+    while True:
+        time.sleep(14 * 60)  # Ping every 14 minutes
+        try:
+            requests.get(f"{my_url}/health", timeout=10)
+            if sim_url:
+                requests.get(f"{sim_url}/health", timeout=10)
+            print("🟢 Keep-alive pings sent to self and similarity_search")
+        except Exception as e:
+            print(f"⚠️ Keep-alive pings failed: {e}")
+
+
 # 🔥 lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -153,6 +173,9 @@ async def lifespan(app: FastAPI):
 
     # optional warmup ping
     dress_model.wait_for_similarity_search_service()
+
+    # Start the keep-alive background thread
+    threading.Thread(target=keep_alive, daemon=True).start()
 
     print("✅ Recommender service ready")
     yield

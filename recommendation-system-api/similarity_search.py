@@ -4,6 +4,9 @@ from contextlib import asynccontextmanager
 import hashlib
 import chromadb
 import os
+import requests
+import threading
+import time
 from dotenv import load_dotenv
 from google import genai
 
@@ -107,6 +110,23 @@ def search_similar(collection, query, n_results=1):
 
 
 # --------------------------------------------------
+# KEEP ALIVE THREAD
+# --------------------------------------------------
+def keep_alive():
+    """Pings the service periodically to prevent Render from sleeping."""
+    # Render automatically sets RENDER_EXTERNAL_URL for web services to their public URL
+    # so you don't need to put it in your .env
+    port = os.getenv("PORT", 8001)
+    url = os.getenv("RENDER_EXTERNAL_URL", f"http://127.0.0.1:{port}")
+    while True:
+        time.sleep(14 * 60)  # Ping every 14 minutes
+        try:
+            requests.get(f"{url}/health", timeout=10)
+            print("🟢 Keep-alive ping sent to similarity_search")
+        except Exception as e:
+            print(f"⚠️ Keep-alive ping failed: {e}")
+
+# --------------------------------------------------
 # LIFESPAN (FAST ONLY)
 # --------------------------------------------------
 @asynccontextmanager
@@ -121,6 +141,9 @@ async def lifespan(app: FastAPI):
 
     client = genai.Client(api_key=api_key)
     collection_occasion, collection_country = init_chroma()
+
+    # Start the keep-alive background thread
+    threading.Thread(target=keep_alive, daemon=True).start()
 
     print("🟢 similarity_search ready (lazy init)")
     yield
